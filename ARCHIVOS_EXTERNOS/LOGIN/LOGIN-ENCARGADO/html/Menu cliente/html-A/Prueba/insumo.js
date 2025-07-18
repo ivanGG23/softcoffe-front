@@ -40,3 +40,81 @@ function seleccionarInsumo(index, filaHTML) {
     tablaInsumos.querySelectorAll("tr").forEach(row => row.classList.remove("selected-row"));
     filaHTML.classList.add("selected-row");
 }
+
+// ✅ Función de validación de campos del insumo
+function validarFormularioInsumo() {
+    let valido = true;
+
+    const codigo = document.getElementById("codigoInsumo").value;
+    const unidad = document.getElementById("unidadMedida").value;
+    const nombre = document.getElementById("nombreInsumo").value;
+    const presentacion = document.getElementById("presentacion").value;
+    const contenido = parseInt(document.getElementById("contenido").value);
+
+    document.getElementById("globalErrorInsumo").style.display = "none";
+    document.getElementById("successInsumo").style.display = "none";
+
+    document.getElementById("errorCodigoInsumo").style.display = codigo ? "none" : "block";
+    document.getElementById("errorUnidadMedida").style.display = unidad ? "none" : "block";
+    document.getElementById("errorNombreInsumo").style.display = nombre ? "none" : "block";
+    document.getElementById("errorPresentacion").style.display = presentacion ? "none" : "block";
+    document.getElementById("errorContenido").style.display = contenido > 0 ? "none" : "block";
+
+    if (!codigo || !unidad || !nombre || !presentacion || contenido <= 0) {
+        document.getElementById("globalErrorInsumo").style.display = "block";
+        valido = false;
+    }
+
+    return valido;
+}
+
+// ✅ Botón para agregar insumo
+document.getElementById("btnAgregarInsumo").onclick = async () => {
+    if (!validarFormularioInsumo()) return;
+
+    const nuevoInsumo = {
+        codigo: parseInt(document.getElementById("codigoInsumo").value),
+        idProducto: productoActualParaInsumo?.id,
+        unidad: document.getElementById("unidadMedida").value,
+        nombre: document.getElementById("nombreInsumo").value,
+        presentacion: document.getElementById("presentacion").value,
+        contenido: parseInt(document.getElementById("contenido").value)
+    };
+
+    if (!nuevoInsumo.idProducto) {
+        alert("No hay un producto asociado para este insumo.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:7000/insumos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nuevoInsumo)
+        });
+
+        const resultado = await response.text();
+        console.log("Respuesta del servidor:", resultado);
+
+        document.getElementById("successInsumo").style.display = "block";
+
+        await cargarInsumosDesdeAPI();
+        productoActualParaInsumo = null;
+        insumoSeleccionado = null;
+        setTimeout(() => {
+            document.getElementById("successInsumo").style.display = "none";
+            document.getElementById("modalInsumo").style.display = "none";
+        }, 2000);
+
+    } catch (error) {
+        console.error("Error al guardar insumo:", error);
+        alert("No se pudo guardar el insumo.");
+    }
+};
+
+// ✅ Botón para salir del formulario
+document.getElementById("btnSalirInsumo").onclick = () => {
+    document.getElementById("modalInsumo").style.display = "none";
+    productoActualParaInsumo = null;
+    insumoSeleccionado = null;
+};
