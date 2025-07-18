@@ -1,0 +1,367 @@
+/* Fuente general */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Encabezado con logo */
+.encabezado {
+  background-color: #f7f3ec;
+  display: flex;
+  align-items: center;
+  padding: 15px 30px;
+  height: 70px; /* Fija la altura del encabezado */
+  overflow: hidden; /* Evita que el logo sobresalga */
+}
+
+.logo {
+  height: 150px;         /* Puedes aumentar esto según lo que necesites */
+  transform: scale(1.5); /* Agranda visualmente el logo */
+  transform-origin: left center; /* Escala desde la izquierda */
+  margin-right: 10px;
+}
+
+.marca {
+  font-weight: bold;
+  font-size: 22px;
+  color: #5b3e2b;
+  letter-spacing: 2px;
+}
+
+/* Fondo principal con imagen */
+.fondo {
+  position: relative;
+  background-image: url('/img/fondo3.jpg'); /* imagen de fondo (café) */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Oscurece ligeramente el fondo */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+/* Contenedor del formulario */
+.formulario {
+  position: relative;
+  z-index: 2;
+  background-color: #ffffff;
+  padding: 20px 20px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 350px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.formulario h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.flecha {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.formulario p {
+  font-size: 13px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+label {
+  font-size: 13px;
+  margin: 8px 0 4px;
+  display: block;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 6px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #999;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+/* Botón */
+button {
+  width: 100%;
+  padding: 9px;
+  font-size: 14px;
+  background: linear-gradient(to right, #b68d5e, #4b3e25);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(to right, #d9aa74, #5a4631);
+}
+
+/* ========== MODAL FINALIZAR CORTE ========== */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none; /* Oculto por defecto */
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+/* Cuando se activa el modal */
+.modal.activo {
+  display: flex;
+}
+
+.modal-contenido {
+  background-color: #fffaf2;
+  padding: 25px 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 350px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  position: relative;
+}
+
+.modal-contenido h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.modal-contenido p {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.modal-contenido label {
+  display: block;
+  font-size: 13px;
+  margin: 10px 0 5px;
+}
+
+.modal-contenido input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.modal-contenido button {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  background: linear-gradient(to right, #b68d5e, #4b3e25);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modal-contenido button:hover {
+  background: linear-gradient(to right, #d9aa74, #5a4631);
+}
+
+/* Estilos para los botones que abren modales */
+.boton-modal {
+  display: block;
+  width: 100%;
+  padding: 9px;
+  font-size: 14px;
+  background: linear-gradient(to right, #b68d5e, #4b3e25);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+}
+
+.boton-modal:hover {
+  background: linear-gradient(to right, #d9aa74, #5a4631);
+}
+
+/* Estilos para el modal de corte finalizado */
+.resultado-corte {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.resultado-corte p {
+  margin: 5px 0;
+}
+
+.monto {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 15px 0 !important;
+  color: #5b3e2b;
+}
+
+/* Mostrar modal cuando es el target */
+.modal:target {
+  display: flex;
+}
+
+/* Botón para cerrar modal */
+.cerrar-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #718350;
+  text-decoration: none;
+}
+
+/* Oscurecer fondo cuando el modal está activo */
+.modal:target ~ main .overlay {
+  opacity: 0.7;
+}
+
+/* Estilos específicos para el modal de cerrar sesión */
+.modal-pequeno {
+  max-width: 280px;
+  text-align: center;
+}
+
+.modal-pequeno h2 {
+  color: #718350;
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.modal-pequeno p {
+  font-size: 15px;
+  margin-bottom: 25px;
+}
+
+.botones-confirmacion {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.boton-principal, .boton-secundario {
+  padding: 8px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  flex: 1;
+  text-align: center;
+}
+
+.boton-principal {
+  background: linear-gradient(#718350);
+  color: white;
+}
+
+.boton-secundario {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+/* Enlace para abrir el modal (debe estar en tu encabezado) */
+.cerrar-sesion {
+  position: absolute;
+  right: 20px;
+  color: #5b3e2b;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* --- Corrección para el botón en el header --- */
+.encabezado {
+  position: relative; /* Asegura que sea el contenedor de referencia */
+}
+
+.cerrar-sesion {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5b3e2b;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px 12px;
+  border: 1px solid #d4c9b8;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.cerrar-sesion:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* --- Ajustes específicos para este modal --- */
+.modal-pequeno {
+  max-width: 280px;
+  text-align: center;
+}
+
+.modal-pequeno h2 {
+  color: #5b3e2b;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.modal-pequeno p {
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.botones-confirmacion {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* (Estas clases ya existen en tu CSS, solo se ajustan) */
+.boton-principal {
+  padding: 10px 15px;
+  flex: 1;
+}
+
+.boton-secundario {
+  padding: 10px 15px;
+  flex: 1;
+}
+
+
+/* Estilo para el modal de éxito */
+#modalCierreExitoso p {
+  color: #718350; /* Verde para éxito */
+  font-size: 16px;
+  margin: 15px 0;
+  text-align: center;
+}

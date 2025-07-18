@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pedidos-cliente</title>
+  <link rel="stylesheet" href="/estilos/menu-cajero.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">
+      <img src="/img/logo2.png" alt="SoftCoffe Logo">
+
+    </div>
+
+    <div class="cerrar-sesion">
+  <button onclick="window.location.href='login-cajero.html'">Cerrar sesión</button>
+</div>
+
+
+
+  </header>
+
+  <main class="contenedor-principal">
+
+    <!-- Fila con buscador a la izquierda y botón a la derecha -->
+    <div class="barra-superior">
+      <div class="buscador-wrapper">
+        <input type="text" placeholder="Buscar pedido" class="input-buscar">
+        <img src="/img/search.png" alt="Buscar" class="icono-buscar">
+      </div>
+
+      <div class="corte-wrapper">
+        <button class="btn-corte">Corte de turno</button>
+        <a href="/html/index3.html" class=""></a>
+      </div>
+    </div>
+
+    
+
+    
+
+    <!-- Cuadros de pedidos -->
+    <div class="contenedor-pedidos">
+      <div class="pedido"><p><strong>1</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+      <div class="pedido"><p><strong>No.Pedido</strong></p><p>Nombre</p><p>Metodo de Pago</p></div>
+    </div>
+
+  </main>
+
+ <script src="/js/menu-cajero.js"></script>
+ <script src="/js/index3.js"></script>
+
+ <!-- Modal de confirmación -->
+<div class="modal-cerrar" id="modalCerrar">
+  <div class="modal-contenido">
+    <p>¿Salir de tu cuenta?</p>
+    <div class="botones-modal">
+      <button id="btn-si">Sí</button>
+      <button id="btn-no">No</button>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

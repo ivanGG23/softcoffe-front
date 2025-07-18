@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogo - SOFTCOFFE</title>
+  <link rel="stylesheet" href="/css/Cata.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <header>
+    <img src="/asset/Fondo-Logo/logo.png" class="logo-img" alt="Logo">
+    <button><i class="fa-solid fa-circle-question"></i></button>
+  </header>
+
+  <nav>
+    <button data-categoria="promos" class="active"><i class="fa-solid fa-tags"></i> Promos</button>
+    <button data-categoria="cafe"><i class="fa-solid fa-mug-hot"></i> Café</button>
+    <button data-categoria="frappe"><i class="fa-solid fa-blender"></i> Frappe</button>
+    <button data-categoria="te"><i class="fa-solid fa-leaf"></i> Té</button>
+    <button data-categoria="postres"><i class="fa-solid fa-cake-candles"></i> Postres</button>
+  </nav>
+
+  <div class="productos-container">
+    <div class="productos" id="contenedor-productos"></div>
+  </div>
+
+  <!-- Modal Editar -->
+  <div id="modal-editar" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-modal" style="cursor: pointer; float: right;">&times;</span>
+      <h2><i class="fa-solid fa-pen-to-square"></i> Editar producto</h2>
+      <form id="form-editar">
+        <div class="form-group">
+          <label for="editar-nombre">Nombre del producto</label>
+          <input type="text" id="editar-nombre" class="input-editar">
+        </div>
+        <div class="form-group">
+          <label for="editar-precio">Precio del producto</label>
+          <input type="number" id="editar-precio" class="input-editar">
+        </div>
+        <div class="form-group">
+          <label for="editar-categoria">Categoría</label>
+          <select id="editar-categoria" class="input-editar">
+            <option value="promos">Promos</option>
+            <option value="cafe">Café</option>
+            <option value="frappe">Frappe</option>
+            <option value="te">Té</option>
+            <option value="postres">Postres</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Imagen del producto</label>
+          <label class="file-input-label">
+            <i class="fa-solid fa-image"></i> Seleccionar imagen (jpg,png)
+          </label>
+          <input type="file" id="editar-imagen" class="file-input" accept="image/*">
+        </div>
+        <div class="imagen-preview-container">
+          <img id="imagen-actual" class="imagen-preview" alt="Imagen actual">
+        </div>
+        <button type="submit" class="btn-guardar">
+          <i class="fa-solid fa-save"></i> Guardar Cambios
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Agregar -->
+  <div id="modal-agregar" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-modal" style="cursor: pointer; float: right;">&times;</span>
+      <h2><i class="fa-solid fa-plus"></i> Agregar producto</h2>
+      <form id="form-agregar">
+        <div class="form-group">
+          <label for="agregar-nombre">Nombre del producto</label>
+          <input type="text" id="agregar-nombre" class="input-editar">
+          <div id="error-nombre" class="error-message">Por favor, introduce un nombre válido</div>
+        </div>
+        <div class="form-group">
+          <label for="agregar-precio">Precio del producto</label>
+          <input type="number" id="agregar-precio" class="input-editar">
+          <div id="error-precio" class="error-message">Por favor, introduce un precio válido</div>
+        </div>
+        <div class="form-group">
+          <label for="agregar-categoria">Categoría</label>
+          <select id="agregar-categoria" class="input-editar">
+            <option value="">Seleccionar</option>
+            <option value="promos">Promos</option>
+            <option value="cafe">Café</option>
+            <option value="frappe">Frappe</option>
+            <option value="te">Té</option>
+            <option value="postres">Postres</option>
+          </select>
+          <div id="error-categoria" class="error-message">Selecciona una categoría válida</div>
+        </div>
+        <div class="form-group">
+          <label>Imagen del producto</label>
+          <label class="file-input-label">
+            <i class="fa-solid fa-image"></i> Seleccionar imagen (jpg,png)
+          </label>
+          <input type="file" id="agregar-imagen" class="file-input" accept="image/*">
+          <div id="file-status" class="file-name">Sin archivo seleccionado</div>
+          <div id="error-imagen" class="error-message">Selecciona una imagen válida</div>
+        </div>
+        <div class="imagen-preview-container">
+          <img id="imagen-agregar" class="imagen-preview" alt="Vista previa">
+        </div>
+        <div id="error-general" class="error-general">Por favor corrige los errores antes de continuar</div>
+        <button type="submit" class="btn-guardar">
+          <i class="fa-solid fa-save"></i> Guardar Producto
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/Cata.js"></script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOFTCOFFE - Venta por Día</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .oculto {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.jpg" alt="Logo SOFTCOFFE" class="logo" />
+    <h1>Venta por Día</h1>
+  </header>
+
+  <nav>
+    <select id="selectorVista">
+      <option value="">Seleccionar vista</option>
+      <option value="hora">Hora</option>
+      <option value="dia" selected>Día</option>
+      <option value="mes">Mes</option>
+    </select>
+
+    <select id="tipoVenta">
+      <option value="">Tipo de Venta</option>
+      <option value="total" selected>Venta total</option>
+      <option value="metodo">Venta por método de pago</option>
+    </select>
+
+    <select>
+      <option>Generar Reporte</option>
+      <option>PDF</option>
+      <option>Excel</option>
+    </select>
+  </nav>
+
+  <main id="contenido" class="oculto">
+    <section class="tabla">
+      <table>
+        <thead>
+          <tr><th>Día</th><th>Venta</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Lunes</td><td>120</td></tr>
+          <tr><td>Martes</td><td>98</td></tr>
+          <tr><td>Miércoles</td><td>110</td></tr>
+          <tr><td>Jueves</td><td>105</td></tr>
+          <tr><td>Viernes</td><td>130</td></tr>
+          <tr><td>Sábado</td><td>150</td></tr>
+          <tr><td>Domingo</td><td>90</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="grafica">
+      <canvas id="graficoVentas"></canvas>
+    </section>
+  </main>
+
+  <script>
+    const selectorVista = document.getElementById('selectorVista');
+    const tipoVenta = document.getElementById('tipoVenta');
+    const contenido = document.getElementById('contenido');
+
+    function redirigir() {
+      const vista = selectorVista.value;
+      const tipo = tipoVenta.value;
+
+      if (!vista || !tipo) return;
+
+      const rutas = {
+        hora: {
+          total: 'venta-hora.html',
+          metodo: 'venta-hora-metodo.html'
+        },
+        dia: {
+          total: 'venta-dia.html',
+          metodo: 'venta-dia-metodo.html'
+        },
+        mes: {
+          total: 'venta-mes.html',
+          metodo: 'venta-mes-metodo.html'
+        }
+      };
+
+      const destino = rutas[vista]?.[tipo];
+      if (destino && !window.location.pathname.includes(destino)) {
+        window.location.href = destino;
+      }
+    }
+
+    selectorVista.addEventListener('change', redirigir);
+    tipoVenta.addEventListener('change', redirigir);
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (tipoVenta.value === 'total') {
+        contenido.classList.remove('oculto');
+      }
+    });
+
+    const ctx = document.getElementById('graficoVentas').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+        datasets: [{
+          label: 'Ventas por día',
+          data: [120, 98, 110, 105, 130, 150, 90],
+          backgroundColor: '#007acc'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

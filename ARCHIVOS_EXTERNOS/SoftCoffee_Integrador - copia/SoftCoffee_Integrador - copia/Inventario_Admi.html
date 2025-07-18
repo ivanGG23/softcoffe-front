@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo - SOFTCOFFE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+      color: #333;
+    }
+
+    header {
+      background-color: #F4F1EA;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-img {
+      height: 50px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 1rem;
+      background-color: #F4F1EA;
+      flex-wrap: wrap;
+    }
+
+    nav button {
+      border: 2px solid #3E2723;
+      border-radius: 40px;
+      padding: 0.5rem 1.5rem;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    nav button:hover, nav button.active {
+      background-color: #3E2723;
+      color: white;
+    }
+
+    .productos-container {
+      max-height: 70vh;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding: 1rem;
+    }
+
+    .producto {
+      background-color: #FAF7F0;
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .imagen-producto {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .producto h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+    }
+
+    .producto p {
+      color: #4B2E2E;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .producto.agregar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      color: #3E2723;
+      cursor: pointer;
+      min-height: 180px;
+      border: 2px dashed #A5855C;
+      background-color: #FAF7F0;
+    }
+
+    .producto.agregar:hover {
+      background-color: #E9E2D6;
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .acciones button {
+      background-color: #A5855C;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Modal de edición */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-contenido {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .modal h2 {
+      color: #3E2723;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #3E2723;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    .input-error {
+      border-color: #e74c3c !important;
+    }
+
+    .file-input-container {
+      position: relative;
+      margin-top: 0.5rem;
+    }
+
+    .file-input-label {
+      display: block;
+      padding: 0.8rem;
+      background-color: #f5f5f5;
+      border: 1px dashed #A5855C;
+      border-radius: 5px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .file-input {
+      position: absolute;
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .file-name {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .imagen-preview-container {
+      margin-top: 1rem;
+      text-align: center;
+    }
+    
+    .imagen-preview {
+      max-width: 100%;
+      max-height: 150px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      display: none;
+    }
+    
+    .sin-imagen {
+      color: #777;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    .error-general {
+      color: #e74c3c;
+      text-align: center;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .btn-guardar {
+      background-color: #A5855C;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 1rem;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-guardar:hover {
+      opacity: 0.9;
+    }
+
+    /* Modal de confirmación eliminación */
+    .confirmacion-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .confirmacion-contenido {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .confirmacion-botones {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .confirmacion-botones button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-confirmar {
+      background-color: #A5855C;
+      color: white;
+    }
+
+    .btn-cancelar {
+      background-color: #bdc3c7;
+      color: #333;
+    }
+
+    /* Mensaje de confirmación */
+    .mensaje-confirmacion {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1001;
+      display: none;
+      animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; top: 0; }
+      to { opacity: 1; top: 20px; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; top: 20px; }
+      to { opacity: 0; top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="mensajeConfirmacion" class="mensaje-confirmacion">
+    Producto agregado correctamente
+  </div>
+
+  <header>
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo SOFTCOFFE" class="logo-img">
+    </div>
+    <div class="iconos-top">
+      <button><i class="fas fa-question-circle"></i></button>
+    </div>
+  </header>
+
+  <nav>
+    <button onclick="filtrarProductos('promos')" class="active"><i class="fas fa-tags"></i> Promos</button>
+    <button onclick="filtrarProductos('cafe')"><i class="fas fa-mug-hot"></i> Café</button>
+    <button onclick="filtrarProductos('frappe')"><i class="fas fa-blender"></i> Frappe</button>
+    <button onclick="filtrarProductos('te')"><i class="fas fa-leaf"></i> Té</button>
+    <button onclick="filtrarProductos('postres')"><i class="fas fa-birthday-cake"></i> Postres</button>
+  </nav>
+
+  <div class="productos-container">
+    <div class="productos" id="contenedor-productos">
+      <!-- Los productos se cargarán dinámicamente aquí -->
+    </div>
+  </div>
+
+  <!-- Modal para Nuevo Producto -->
+  <div class="modal" id="modalNuevoProducto">
+    <div class="modal-contenido">
+      <h2>Agregar producto</h2>
+      <div class="form-group">
+        <label for="nuevoNombre">Nombre del producto</label>
+        <input type="text" id="nuevoNombre" placeholder="Ej: Frappe Moca">
+        <div id="errorNombre" class="error-message">Nombre incorrecto*</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="nuevoPrecio">Precio del producto</label>
+        <input type="number" id="nuevoPrecio" placeholder="Ej: 65.00">
+        <div id="errorPrecio" class="error-message">Cantidad incorrecta*</div>
+      </div>
+
+      <div class="form-group">
+        <label for="nuevaCategoria">Categoría</label>
+        <select id="nuevaCategoria">
+          <option value="promos">Promos</option>
+          <option value="cafe">Café</option>
+          <option value="frappe">Frappe</option>
+          <option value="te">Té</option>
+          <option value="postres">Postres</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Carga de imagen para la promoción</label>
+        <div class="file-input-container">
+          <label for="nuevaImagen" class="file-input-label">
+            <i class="fas fa-cloud-upload-alt"></i> Seleccionar imagen (jpg,png)
+          </label>
+          <input type="file" id="nuevaImagen" class="file-input" accept="image/jpeg, image/png" onchange="mostrarVistaPrevia(this, 'vistaPreviaNuevo', 'nombreArchivoNuevo')">
+          <div id="nombreArchivoNuevo" class="file-name">Sin archivo seleccionado</div>
+        </div>
+        <div id="errorImagen" class="error-message">Carga de imagen incorrecta*</div>
+        
+        <div class="imagen-preview-container">
+          <img id="vistaPreviaNuevo" class="imagen-preview" alt="Vista previa de imagen">
+          <p id="sinImagenNuevo" class="sin-imagen">No hay imagen seleccionada</p>
+        </div>
+      </div>
+      
+      <div id="errorGeneral" class="error-general">Rellene los campos vacíos*</div>
+      
+      <button class="btn-guardar" onclick="validarFormularioNuevo()">
+        <i class="fas fa-plus"></i> Crear Producto
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de Edición -->
+  <div class="modal" id="modalEdicion">
+    <div class="modal-contenido">
+      <h2>Editar producto</h2>
+      <div class="form-group">
+        <label for="nombreProducto">Nombre del producto</label>
+        <input type="text" id="nombreProducto" placeholder="Ej: Frappe Moca">
+        <div id="errorNombreEdicion" class="error-message">Nombre incorrecto*</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="precioProducto">Precio del producto</label>
+        <input type="number" id="precioProducto" placeholder="Ej: 65.00">
+        <div id="errorPrecioEdicion" class="error-message">Cantidad incorrecta*</div>
+      </div>
+
+      <div class="form-group">
+        <label for="categoriaProducto">Categoría</label>
+        <select id="categoriaProducto">
+          <option value="promos">Promos</option>
+          <option value="cafe">Café</option>
+          <option value="frappe">Frappe</option>
+          <option value="te">Té</option>
+          <option value="postres">Postres</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Carga de imagen para la promoción</label>
+        <div class="file-input-container">
+          <label for="imagenProducto" class="file-input-label">
+            <i class="fas fa-cloud-upload-alt"></i> Seleccionar imagen (jpg,png)
+          </label>
+          <input type="file" id="imagenProducto" class="file-input" accept="image/jpeg, image/png" onchange="mostrarVistaPrevia(this, 'vistaPreviaEdicion', 'nombreArchivoEdicion')">
+          <div id="nombreArchivoEdicion" class="file-name">Sin archivo seleccionado</div>
+        </div>
+        <div id="errorImagenEdicion" class="error-message">Carga de imagen incorrecta*</div>
+        
+        <div class="imagen-preview-container">
+          <img id="vistaPreviaEdicion" class="imagen-preview" alt="Vista previa de imagen">
+          <p id="sinImagenEdicion" class="sin-imagen">No hay imagen seleccionada</p>
+        </div>
+      </div>
+      
+      <div id="errorGeneralEdicion" class="error-general">Rellene los campos vacíos*</div>
+      
+      <button class="btn-guardar" onclick="validarFormularioEdicion()">
+        <i class="fas fa-save"></i> Guardar Cambios
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de Confirmación Eliminación -->
+  <div class="confirmacion-modal" id="confirmacionModal">
+    <div class="confirmacion-contenido">
+      <h2>¿Eliminar producto?</h2>
+      <p>¿Estás seguro que deseas eliminar este producto? Esta acción no se puede deshacer.</p>
+      <div class="confirmacion-botones">
+        <button class="btn-cancelar" onclick="cerrarConfirmacion()">Cancelar</button>
+        <button class="btn-confirmar" onclick="confirmarEliminacion()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Datos de ejemplo de productos por categoría
+    const productos = {
+      promos: [
+        { id: 1, nombre: "Combo Desayuno", precio: 85.00, imagen: "combo-desayuno.png", categoria: "promos" },
+        { id: 2, nombre: "Promo Merienda", precio: 75.00, imagen: "promo-merienda.png", categoria: "promos" }
+      ],
+      cafe: [
+        { id: 3, nombre: "Americano", precio: 45.00, imagen: "americano.png", categoria: "cafe" },
+        { id: 4, nombre: "Expreso", precio: 40.00, imagen: "expreso.png", categoria: "cafe" }
+      ],
+      frappe: [
+        { id: 5, nombre: "Frappe Moca", precio: 65.00, imagen: "frappe-moca.png", categoria: "frappe" },
+        { id: 6, nombre: "Frappe Vainilla", precio: 65.00, imagen: "frappe-vainilla.png", categoria: "frappe" }
+      ],
+      te: [
+        { id: 7, nombre: "Té Verde", precio: 35.00, imagen: "te-verde.png", categoria: "te" },
+        { id: 8, nombre: "Té Negro", precio: 35.00, imagen: "te-negro.png", categoria: "te" }
+      ],
+      postres: [
+        { id: 9, nombre: "Pastel Chocolate", precio: 60.00, imagen: "pastel-chocolate.png", categoria: "postres" },
+        { id: 10, nombre: "Cheesecake", precio: 65.00, imagen: "cheesecake.png", categoria: "postres" }
+      ]
+    };
+
+    let productoActual = null;
+    let productoAEliminar = null;
+    let ultimoId = 10; // ID del último producto en los datos
+    let categoriaActual = 'promos';
+
+    // Cargar productos al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+      cargarProductos(categoriaActual);
+    });
+
+    // Función para cargar productos por categoría
+    function cargarProductos(categoria) {
+      const contenedor = document.getElementById('contenedor-productos');
+      contenedor.innerHTML = '';
+
+      productos[categoria].forEach(producto => {
+        const productoHTML = `
+          <div class="producto" data-id="${producto.id}" data-categoria="${producto.categoria}">
+            <img src="${producto.imagen}" alt="${producto.nombre}" class="imagen-producto">
+            <h3>${producto.nombre}</h3>
+            <p>$${producto.precio.toFixed(2)}</p>
+            <div class="acciones">
+              <button class="btn-editar" onclick="abrirModalEdicion(${producto.id})">
+                <i class="fas fa-edit"></i> Editar
+              </button>
+              <button class="btn-eliminar" onclick="mostrarConfirmacion(${producto.id})">
+                <i class="fas fa-trash"></i> Eliminar
+              </button>
+            </div>
+          </div>
+        `;
+        contenedor.insertAdjacentHTML('beforeend', productoHTML);
+      });
+
+      // Agregar botón de "Agregar Producto"
+      const agregarBtn = `
+        <div class="producto agregar" onclick="abrirModalNuevoProducto()">
+          <i class="fas fa-plus"></i>
+          <p>Agregar Producto</p>
+        </div>
+      `;
+      contenedor.insertAdjacentHTML('beforeend', agregarBtn);
+    }
+
+    // Función para filtrar productos por categoría
+    function filtrarProductos(categoria) {
+      categoriaActual = categoria;
+      cargarProductos(categoria);
+      
+      // Actualizar botón activo
+      document.querySelectorAll('nav button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    // Mostrar mensaje de confirmación
+    function mostrarMensajeConfirmacion() {
+      const mensaje = document.getElementById('mensajeConfirmacion');
+      mensaje.style.display = 'block';
+      
+      // Ocultar después de 3 segundos
+      setTimeout(() => {
+        mensaje.style.display = 'none';
+      }, 3000);
+    }
+
+    // Abrir modal para nuevo producto
+    function abrirModalNuevoProducto() {
+      // Limpiar formulario y errores
+      document.getElementById('nuevoNombre').value = '';
+      document.getElementById('nuevoPrecio').value = '';
+      document.getElementById('nuevaCategoria').value = categoriaActual;
+      document.getElementById('nuevaImagen').value = '';
+      document.getElementById('vistaPreviaNuevo').style.display = 'none';
+      document.getElementById('sinImagenNuevo').style.display = 'block';
+      document.getElementById('nombreArchivoNuevo').textContent = 'Sin archivo seleccionado';
+      
+      // Ocultar errores
+      document.querySelectorAll('.error-message, .error-general').forEach(el => {
+        el.style.display = 'none';
+      });
+      document.getElementById('nuevoNombre').classList.remove('input-error');
+      document.getElementById('nuevoPrecio').classList.remove('input-error');
+      
+      document.getElementById('modalNuevoProducto').style.display = 'flex';
+    }
+
+    // Abrir modal de edición
+    function abrirModalEdicion(id) {
+      productoActual = id;
+      
+      // Encontrar el producto en cualquier categoría
+      let productoEncontrado = null;
+      let categoriaProducto = '';
+      
+      for (const categoria in productos) {
+        const producto = productos[categoria].find(p => p.id === id);
+        if (producto) {
+          productoEncontrado = producto;
+          categoriaProducto = categoria;
+          break;
+        }
+      }
+      
+      if (!productoEncontrado) return;
+
+      // Limpiar errores
+      document.querySelectorAll('#modalEdicion .error-message, #modalEdicion .error-general').forEach(el => {
+        el.style.display = 'none';
+      });
+      document.getElementById('nombreProducto').classList.remove('input-error');
+      document.getElementById('precioProducto').classList.remove('input-error');
+      
+      // Rellenar formulario
+      document.getElementById('nombreProducto').value = productoEncontrado.nombre;
+      document.getElementById('precioProducto').value = productoEncontrado.precio;
+      document.getElementById('categoriaProducto').value = categoriaProducto;
+      
+      // Mostrar vista previa de la imagen actual si existe
+      const vistaPrevia = document.getElementById('vistaPreviaEdicion');
+      const sinImagen = document.getElementById('sinImagenEdicion');
+      const nombreArchivo = document.getElementById('nombreArchivoEdicion');
+      
+      if (productoEncontrado.imagen && productoEncontrado.imagen !== 'sin-imagen.png') {
+        vistaPrevia.src = productoEncontrado.imagen;
+        vistaPrevia.style.display = 'block';
+        sinImagen.style.display = 'none';
+        nombreArchivo.textContent = 'Imagen actual';
+      } else {
+        vistaPrevia.style.display = 'none';
+        sinImagen.style.display = 'block';
+        nombreArchivo.textContent = 'Sin archivo seleccionado';
+      }
+      
+      document.getElementById('modalEdicion').style.display = 'flex';
+    }
+
+    // Mostrar vista previa de imagen
+    function mostrarVistaPrevia(input, idVistaPrevia, idNombreArchivo) {
+      const vistaPrevia = document.getElementById(idVistaPrevia);
+      const sinImagen = document.getElementById(input.id === 'imagenProducto' ? 'sinImagenEdicion' : 'sinImagenNuevo');
+      const nombreArchivo = document.getElementById(idNombreArchivo);
+      
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          vistaPrevia.src = e.target.result;
+          vistaPrevia.style.display = 'block';
+          sinImagen.style.display = 'none';
+          nombreArchivo.textContent = input.files[0].name;
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        vistaPrevia.style.display = 'none';
+        sinImagen.style.display = 'block';
+        nombreArchivo.textContent = 'Sin archivo seleccionado';
+      }
+    }
+
+    // Validar formulario nuevo producto
+    function validarFormularioNuevo() {
+      const nombre = document.getElementById('nuevoNombre').value;
+      const precio = document.getElementById('nuevoPrecio').value;
+      const imagen = document.getElementById('nuevaImagen').files.length;
+      
+      let valido = true;
+      
+      // Resetear errores
+      document.getElementById('errorNombre').style.display = 'none';
+      document.getElementById('errorPrecio').style.display = 'none';
+      document.getElementById('errorImagen').style.display = 'none';
+      document.getElementById('errorGeneral').style.display = 'none';
+      document.getElementById('nuevoNombre').classList.remove('input-error');
+      document.getElementById('nuevoPrecio').classList.remove('input-error');
+      
+      // Validar nombre
+      if (!nombre) {
+        document.getElementById('errorNombre').style.display = 'block';
+        document.getElementById('nuevoNombre').classList.add('input-error');
+        valido = false;
+      }
+      
+      // Validar precio
+      if (!precio || isNaN(precio) || Number(precio) <= 0) {
+        document.getElementById('errorPrecio').style.display = 'block';
+        document.getElementById('nuevoPrecio').classList.add('input-error');
+        valido = false;
+      }
+      
+      // Validar imagen (opcional)
+      if (!imagen) {
+        document.getElementById('errorImagen').style.display = 'block';
+        valido = false;
+      }
+      
+      if (!valido) {
+        document.getElementById('errorGeneral').style.display = 'block';
+        return;
+      }
+      
+      // Si todo es válido, agregar el producto
+      agregarNuevoProducto();
+    }
+    
+    // Agregar nuevo producto
+    function agregarNuevoProducto() {
+      const nuevoNombre = document.getElementById('nuevoNombre').value;
+      const nuevoPrecio = parseFloat(document.getElementById('nuevoPrecio').value);
+      const nuevaCategoria = document.getElementById('nuevaCategoria').value;
+      const imagenInput = document.getElementById('nuevaImagen');
+      
+      ultimoId++;
+      const nuevoProducto = {
+        id: ultimoId,
+        nombre: nuevoNombre,
+        precio: nuevoPrecio,
+        imagen: imagenInput.files.length > 0 ? `producto-${ultimoId}.png` : 'sin-imagen.png',
+        categoria: nuevaCategoria
+      };
+      
+      // Agregar a la categoría seleccionada
+      productos[nuevaCategoria].push(nuevoProducto);
+      
+      // Recargar productos de la categoría actual
+      cargarProductos(categoriaActual);
+      mostrarMensajeConfirmacion();
+      cerrarModalNuevo();
+    }
+
+    // Validar formulario edición
+    function validarFormularioEdicion() {
+      const nombre = document.getElementById('nombreProducto').value;
+      const precio = document.getElementById('precioProducto').value;
+      
+      let valido = true;
+      
+      // Resetear errores
+      document.getElementById('errorNombreEdicion').style.display = 'none';
+      document.getElementById('errorPrecioEdicion').style.display = 'none';
+      document.getElementById('errorGeneralEdicion').style.display = 'none';
+      document.getElementById('nombreProducto').classList.remove('input-error');
+      document.getElementById('precioProducto').classList.remove('input-error');
+      
+      // Validar nombre
+      if (!nombre) {
+        document.getElementById('errorNombreEdicion').style.display = 'block';
+        document.getElementById('nombreProducto').classList.add('input-error');
+        valido = false;
+      }
+      
+      // Validar precio
+      if (!precio || isNaN(precio) || Number(precio) <= 0) {
+        document.getElementById('errorPrecioEdicion').style.display = 'block';
+        document.getElementById('precioProducto').classList.add('input-error');
+        valido = false;
+      }
+      
+      if (!valido) {
+        document.getElementById('errorGeneralEdicion').style.display = 'block';
+        return;
+      }
+      
+      // Si todo es válido, guardar cambios
+      guardarCambios();
+    }
+
+    // Guardar cambios de edición
+    function guardarCambios() {
+      const nuevoNombre = document.getElementById('nombreProducto').value;
+      const nuevoPrecio = parseFloat(document.getElementById('precioProducto').value);
+      const nuevaCategoria = document.getElementById('categoriaProducto').value;
+      const imagenInput = document.getElementById('imagenProducto');
+      
+      // Encontrar el producto en cualquier categoría
+      let productoEncontrado = null;
+      let categoriaOriginal = '';
+      
+      for (const categoria in productos) {
+        const index = productos[categoria].findIndex(p => p.id === productoActual);
+        if (index !== -1) {
+          productoEncontrado = productos[categoria][index];
+          categoriaOriginal = categoria;
+          break;
+        }
+      }
+      
+      if (!productoEncontrado) return;
+
+      // Actualizar datos del producto
+      productoEncontrado.nombre = nuevoNombre;
+      productoEncontrado.precio = nuevoPrecio;
+      
+      if (imagenInput.files.length > 0) {
+        productoEncontrado.imagen = `producto-${productoActual}.png`;
+      }
+      
+      // Si cambió la categoría, mover el producto
+      if (categoriaOriginal !== nuevaCategoria) {
+        productos[categoriaOriginal] = productos[categoriaOriginal].filter(p => p.id !== productoActual);
+        productos[nuevaCategoria].push(productoEncontrado);
+        productoEncontrado.categoria = nuevaCategoria;
+      }
+      
+      // Recargar productos de la categoría actual
+      cargarProductos(categoriaActual);
+      mostrarMensajeConfirmacion();
+      cerrarModal();
+    }
+
+    // Mostrar confirmación de eliminación
+    function mostrarConfirmacion(id) {
+      productoAEliminar = id;
+      document.getElementById('confirmacionModal').style.display = 'flex';
+    }
+
+    // Confirmar eliminación
+    function confirmarEliminacion() {
+      if (productoAEliminar) {
+        // Buscar y eliminar el producto de su categoría
+        for (const categoria in productos) {
+          productos[categoria] = productos[categoria].filter(p => p.id !== productoAEliminar);
+        }
+        
+        // Recargar productos
+        cargarProductos(categoriaActual);
+        cerrarConfirmacion();
+      }
+    }
+
+    // Cerrar modales
+    function cerrarModal() {
+      document.getElementById('modalEdicion').style.display = 'none';
+    }
+
+    function cerrarModalNuevo() {
+      document.getElementById('modalNuevoProducto').style.display = 'none';
+    }
+
+    function cerrarConfirmacion() {
+      document.getElementById('confirmacionModal').style.display = 'none';
+    }
+
+    // Cerrar modales al hacer clic fuera del contenido
+    window.onclick = function(event) {
+      if (event.target === document.getElementById('modalEdicion')) {
+        cerrarModal();
+      }
+      if (event.target === document.getElementById('modalNuevoProducto')) {
+        cerrarModalNuevo();
+      }
+      if (event.target === document.getElementById('confirmacionModal')) {
+        cerrarConfirmacion();
+      }
+    }
+  </script>
+</body>
+</html>

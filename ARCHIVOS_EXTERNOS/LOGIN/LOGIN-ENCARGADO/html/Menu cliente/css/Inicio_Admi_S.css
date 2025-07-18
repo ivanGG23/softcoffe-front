@@ -1,0 +1,90 @@
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-image: url('../assets/img_A/fondo.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
+header {
+  background-color: #F4F1EA;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 60px;
+}
+
+/* Estilos del login de admin */
+.admin-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px);
+}
+
+.admin-login-box {
+  background-color: #F4F1EA;
+  border-radius: 15px;
+  padding: 40px;
+  width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.admin-login-box h1 {
+  color: #3E2723;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.admin-login-box p {
+  color: #5D4037;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  color: #3E2723;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #D7CCC8;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.admin-login-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, #A5855C, #3F3323);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.admin-login-button:hover {
+  transform: scale(1.02);
+}

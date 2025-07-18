@@ -1,0 +1,147 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-image: url('../assets/img_A/fondo.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  color: #fff;
+}
+
+header {
+  background-color: #F4F1EA;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 60px;
+}
+
+.logout-btn {
+  background-color: #3c1e1e;
+  color: #fff;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #5c2d2d;
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  height: calc(100vh - 80px);
+  padding: 20px;
+}
+
+.card {
+  position: relative;
+  width: 250px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+  transition: filter 0.3s ease;
+}
+
+.card:hover img {
+  filter: brightness(0.8);
+}
+
+.card-text {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #F4F1EA;
+  padding: 30px 40px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+} 
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 10px 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn.red {
+  background-color: #a2443d;
+}
+
+.btn.red:hover {
+  background-color: #872e29;
+}
+
+.btn.green {
+  background-color: #7c9850;
+}
+
+.btn.green:hover {
+  background-color: #64803d;
+}

@@ -1,0 +1,273 @@
+/* ESTILOS ORIGINALES */
+:root {
+  --cream: #F4F1EA;
+  --brown: #3E2723;
+  --button-color: #8B6A47;
+  --text-dark: #333;
+  --border-color: #ddd;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* HEADER */
+.main-header {
+  background-color: var(--cream);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.logo {
+  height: 200px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.time {
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.logout-button {
+  background-color: var(--brown);
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: 'Arial', sans-serif;
+  font-size: inherit;
+}
+
+/* TABS */
+.tabs {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  gap: 10px;
+  border-bottom: 1px solid #ccc;
+  flex-wrap: wrap;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--text-dark);
+  transition: background 0.3s ease;
+}
+
+.tab.active {
+  background-color: var(--brown);
+  color: white;
+}
+
+.tab-icons {
+  margin-left: auto;
+  display: flex;
+  gap: 15px;
+}
+
+.tab-icons img {
+  height: 20px;
+  cursor: pointer;
+}
+
+/* GRID DE PEDIDOS */
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* TARJETAS */
+.order-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 230px;
+  max-height: 250px;
+}
+
+.order-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.order-num {
+  font-weight: bold;
+}
+
+.product-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.order-card p {
+  font-size: 14px;
+  text-align: center;
+  margin: 2px 0;
+}
+
+.prepare-btn {
+  margin-top: 8px;
+  background-color: var(--button-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.prepare-btn:hover {
+  background-color: #6f5239;
+}
+
+/* ESTILOS PARA EL POPUP */
+.confirmation-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-popup:target {
+  display: flex;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+  font-weight: bold;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.popup-button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.no-button {
+  background-color: #922B21;
+  color: white;
+}
+
+.no-button:hover {
+  background-color: #e0e0e0;
+}
+
+.yes-button {
+  background-color: #718350;
+  color: white;
+}
+
+.yes-button:hover {
+  background-color: #2E1A16;
+}
+
+.detalle-container {
+  padding: 20px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.detalle-container h2 {
+  margin-bottom: 20px;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+.pedido-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.pedido-table th, .pedido-table td {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  text-align: center;
+}
+
+.pedido-table th {
+  background-color: var(--cream);
+  color: var(--text-dark);
+}
+
+.entregar-btn {
+  display: block;
+  margin: 0 auto;
+  background-color: var(--button-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.entregar-btn:hover {
+  background-color: #6f5239;
+}

@@ -1,0 +1,327 @@
+/* ===== ESTILOS GENERALES ===== */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #333;
+}
+
+.header {
+    background-color: #F4F1EA;
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+}
+
+.logo {
+    height: 200px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* ===== BARRA DE BÚSQUEDA ===== */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    padding: 0 20px;
+    margin-bottom: 40px;
+}
+
+.shift-cut-btn {
+    background: #F4F1EA;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    padding: 10px 15px;
+    height: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.search-label {
+    position: absolute;
+    left: 20px;
+    bottom: -25px;
+    font-size: 18px;
+    color: #3E2723;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+}
+
+.search-wrapper {
+    position: relative;
+    width: 350px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 40px 0 15px;
+    border: 1px solid #D9D9D9;
+    border-radius: 4px;
+    outline: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-style: italic;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+/* ===== TABLA MEJORADA ===== */
+.order-table-container {
+    width: calc(100% - 40px);
+    margin: 0 20px;
+    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.order-table th, 
+.order-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+}
+
+.order-table th {
+    background-color: #3E2723;
+    color: white;
+    font-weight: bold;
+}
+
+.order-table td {
+    color: #555;
+}
+
+.table-row:hover {
+    background-color: #f9f9f9;
+}
+
+/* Estilos específicos de columnas */
+.product-col {
+    width: 50%;
+}
+
+.qty-col {
+    width: 15%;
+    text-align: center;
+}
+
+.price-col, .subtotal-col {
+    width: 17.5%;
+    text-align: right;
+}
+
+.table-footer td {
+    font-weight: bold;
+    background-color: #F4F1EA;
+    border-top: 2px solid #ddd;
+}
+
+.total-label {
+    text-align: right;
+    padding-right: 20px !important;
+}
+
+.total-amount {
+    color: #3E2723;
+    font-size: 16px;
+}
+
+/* ===== SECCIÓN DE PAGO ===== */
+.payment-section {
+    padding: 20px;
+    margin: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: right;
+}
+
+.total {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #3E2723;
+}
+
+.buttons {
+    display: inline-flex;
+    gap: 15px;
+}
+
+.cancel-btn, .confirm-btn {
+    height: 45px;
+    padding: 0 25px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background: #922B21;
+    color: white;
+    border: none;
+}
+
+.cancel-btn:hover {
+    background: #7d241c;
+}
+
+.confirm-btn {
+    background: #718350;
+    color: white;
+    border: none;
+}
+
+.confirm-btn:hover {
+    background: #5e6e42;
+}
+
+/* ===== MODALES ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+#cancel-modal .modal-content {
+    border-top: 4px solid #922B21;
+}
+
+#confirm-modal .modal-content {
+    border-top: 4px solid #718350;
+}
+
+.close-btn {
+    background: #718350;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 4px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: #5e6e42;
+}
+
+/* Botón cerrar sesión */
+.cerrar-sesion {
+  margin-left: auto;
+}
+
+.cerrar-sesion button {
+  padding: 8px 12px;
+  background-color: #a94442;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cerrar-sesion button:hover {
+  background-color: #922d2d;
+}
+
+/* Modal */
+.modal-cerrar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-contenido {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.botones-modal {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.botones-modal button {
+  padding: 8px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#btn-si {
+  background-color: #5c8d4e;
+  color: white;
+}
+
+#btn-no {
+  background-color: #ccc;
+  color: #000;
+}

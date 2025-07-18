@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulario</title>
+  <!-- Por esto (si los archivos están en /proyecto): -->
+  <link rel="stylesheet" href="../css/styles3.css">
+
+</head>
+
+<body>
+  <header class="encabezado">
+    <div class="contenedor-logo">
+      <img src="../../img/LogoSoftCoffee.png" class="logo" alt="Logo">
+    </div>
+    <span class="marca"></span>
+    <div class="contenedor-cerrar-sesion">
+      <a href="#modalCerrarSesion" class="cerrar-sesion">Cerrar sesión</a>
+    </div>
+  </header>
+
+  <main class="fondo">
+    <div class="overlay"></div>
+
+    <section class="formulario">
+      <h2><span class="flecha">&#x2190;</span> Corte de turno</h2>
+      <p>Termina tu turno llenando los siguientes datos.</p>
+
+      <form action="#modalCorteFinalizado" id="corteTurnoForm">
+        <label for="inicio1">Cantidad Inicial de turno</label>
+        <input type="text" id="inicio1">
+        <div class="error-mensaje" id="error-inicio"></div>
+
+        <label for="efectivo1">Cantidad en efectivo</label>
+        <input type="text" id="efectivo1" placeholder="Ingrese el efectivo en turno">
+        <div class="error-mensaje" id="error-efectivo"></div>
+
+        <label for="tarjeta1">Cantidad en tarjeta</label>
+        <input type="text" id="tarjeta1">
+        <div class="error-mensaje" id="error-tarjeta"></div>
+
+        <button type="submit" class="boton-modal">Finalizar Corte de turno</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Modal: Corte Finalizado -->
+  <div class="modal" id="modalCorteFinalizado">
+    <div class="modal-contenido">
+      <a href="#" class="cerrar-modal">×</a>
+      <h2><span class="flecha">&#x2190;</span> Corte Finalizado</h2>
+
+      <div class="resultado-corte">
+        <p><strong>Terminar Turno</strong></p>
+
+        <a href="../../../../index.html" class="boton-modal">Cerrar</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal de Cerrar Sesión (conserva tus otros modales) -->
+  <div class="modal" id="modalCerrarSesion">
+    <div class="modal-contenido modal-pequeno">
+      <a href="#" class="cerrar-modal">×</a>
+      <h2>SOFTCOFFE</h2>
+      <p>Cerrar sesión</p>
+      <div class="botones-confirmacion">
+        <a href="#" class="boton-secundario">No</a>
+        <!-- En tu modal de confirmación actual -->
+        <a href="#modalCierreExitoso" class="boton-principal">Sí</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal de Cierre Exitoso -->
+  <div class="modal" id="modalCierreExitoso">
+    <div class="modal-contenido modal-pequeno">
+      <h2>SOFTCOFFE</h2>
+      <p>Cierre de sesión exitoso</p>
+      <a href="../../../index.html" class="boton-principal">Aceptar</a> <!-- Enlace a tu página de login -->
+    </div>
+  </div>
+
+  <script src="../js/corteT.js"></script>
+
+</body>
+
+</html>

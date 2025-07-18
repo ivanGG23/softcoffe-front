@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  font-family: 'Arial', sans-serif;
+  height: 100%;
+}
+
+/* Header */
+.header {
+  background-color: #fdf6ee;
+  padding: 10px 20px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.logo {
+  height: 200px;
+  object-fit: contain;
+}
+
+/* Fondo café */
+.fondo-cafe {
+  background-image: url('/img/fondo4.jpg');
+  background-size: cover;
+  background-position: center;
+  height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenedor formulario */
+.contenedor-turno {
+  background-color: #fff7ee;
+  padding: 30px;
+  border-radius: 15px;
+  width: 300px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.contenido-turno {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flecha {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+label {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+input[type="number"] {
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+button {
+  padding: 10px;
+  background: linear-gradient(to right, #c59c6f, #5a4632);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Mensajes de error */
+.error, .error-2 {
+  font-size: 12px;
+  color: red;
+  margin-top: -5px;
+  font-weight: bold;
+}

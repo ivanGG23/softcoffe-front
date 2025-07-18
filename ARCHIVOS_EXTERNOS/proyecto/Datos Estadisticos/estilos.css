@@ -1,0 +1,61 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background-color: #f9f9f9;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  background-color: #4b2e2e;
+  color: white;
+  padding: 10px 20px;
+}
+
+.logo {
+  height: 100px;
+  margin-right: 5px;
+}
+
+nav {
+  display: flex;
+  gap: 10px;
+  padding: 15px 20px;
+  background-color: #eee;
+}
+
+select {
+  padding: 8px;
+  font-size: 1em;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 20px;
+}
+
+.tabla {
+  flex: 1;
+  min-width: 300px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.grafica {
+  flex: 2;
+  min-width: 300px;
+  background-color: white;
+  padding: 20px;
+}

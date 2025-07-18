@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pedidos</title>
+    <link rel="stylesheet" href="/estilos/pedido-confirmacion.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="/img/logo2.png" alt="SOFTCOFFE" class="logo">
+        </div>
+
+        <div class="cerrar-sesion">
+  <button onclick="window.location.href='login-cajero.html'">Cerrar sesión</button>
+  
+</div>
+
+
+
+    </header>
+
+    <!-- Contenedor principal -->
+    <div class="content">
+        <!-- Barra de búsqueda -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="text" placeholder="Buscar pedido" class="search-input">
+                <img src="/img/search.png" alt="Buscar" class="search-icon">
+            </div>
+            <!-- Botón actual en tu pedido-confirmacion.html -->
+<button class="shift-cut-btn" onclick="window.location.href='index3.html'">Corte de turno</button>
+
+            
+            <div class="search-label" id="info-pedido">No.Pedido/Nombre</div>
+        </div>
+
+        <!-- Tabla de productos mejorada -->
+        <div class="order-table-container">
+            <table class="order-table">
+                <thead>
+                    <tr class="table-header">
+                        <th class="product-col">Producto</th>
+                        <th class="qty-col">Cantidad</th>
+                        <th class="price-col">Precio Unitario</th>
+                        <th class="subtotal-col">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody id="productos-tbody">
+                    <!-- Los productos se agregarán dinámicamente -->
+                </tbody>
+                <tfoot>
+                    <tr class="table-footer">
+                        <td colspan="3" class="total-label">Total</td>
+                        <td class="total-amount">$0.00</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Sección de pago -->
+        <div class="payment-section">
+            <h2>Total a pagar</h2>
+            <p class="total" id="total-pagar-big">$0.00</p>
+            <div class="buttons">
+                <button class="cancel-btn" onclick="openModal('cancel-modal')">Cancelar</button>
+                <button class="confirm-btn" onclick="openModal('confirm-modal')">Confirmar Pago</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cancelación -->
+    <div class="modal-overlay" id="cancel-modal">
+        <div class="modal-content">
+            <h3>Pedido Cancelado</h3>
+            <p>El pedido ha sido cancelado exitosamente</p>
+            <button class="close-btn" onclick="closeModal('cancel-modal')">Aceptar</button>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmación -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-content">
+            <h3>Pedido Aprobado</h3>
+            <p>El pago se ha procesado correctamente</p>
+            <button class="close-btn" onclick="closeModal('confirm-modal')">Aceptar</button>
+        </div>
+    </div>
+
+    <script>
+        // Datos del pedido actual
+        const pedidoActual = {
+            numero: '',
+            nombre: '',
+            productos: [],
+            fecha: ''
+        };
+
+        // Funciones para modales
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Función para agregar producto a la tabla
+        function agregarProducto(nombre, cantidad, precio) {
+            const tbody = document.getElementById('productos-tbody');
+            const subtotal = cantidad * precio;
+            
+            const row = document.createElement('tr');
+            row.className = 'table-row';
+            row.innerHTML = `
+                <td>${nombre}</td>
+                <td>${cantidad}</td>
+                <td>$${precio.toFixed(2)}</td>
+                <td>$${subtotal.toFixed(2)}</td>
+            `;
+            
+            tbody.appendChild(row);
+            pedidoActual.productos.push({nombre, cantidad, precio});
+            actualizarTotal();
+        }
+
+        // Función para actualizar el total
+        function actualizarTotal() {
+            const total = pedidoActual.productos.reduce((sum, producto) => {
+                return sum + (producto.cantidad * producto.precio);
+            }, 0);
+            
+            document.querySelector('.total-amount').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('total-pagar-big').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Función para cargar datos del pedido
+        function cargarDatosPedido(datos) {
+            // Actualizar información principal
+            pedidoActual.numero = datos.numero;
+            pedidoActual.nombre = datos.nombre;
+            pedidoActual.fecha = datos.fecha || new Date().toISOString();
+            
+            document.getElementById('info-pedido').textContent = 
+                `Pedido #${pedidoActual.numero} - ${pedidoActual.nombre}`;
+            
+            // Limpiar tabla anterior
+            document.getElementById('productos-tbody').innerHTML = '';
+            pedidoActual.productos = [];
+            
+            // Agregar productos
+            datos.productos.forEach(p => agregarProducto(p.nombre, p.cantidad, p.precio));
+        }
+
+        // Al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si hay datos en localStorage
+            const datosPedido = JSON.parse(localStorage.getItem('pedidoActual'));
+            if (datosPedido) {
+                cargarDatosPedido(datosPedido);
+                localStorage.removeItem('pedidoActual');
+            }
+            
+            // Para desarrollo: datos de ejemplo
+            if (pedidoActual.productos.length === 0) {
+                cargarDatosPedido({
+                    numero: 'PED-' + Date.now().toString().slice(-6),
+                    nombre: 'Cliente Demo',
+                    productos: [
+                        {nombre: "Café Americano", cantidad: 2, precio: 35.00},
+                        {nombre: "Té Verde", cantidad: 1, precio: 25.00}
+                    ]
+                });
+            }
+        });
+    </script>
+
+    <!-- Modal de confirmación -->
+<div class="modal-cerrar" id="modalCerrar">
+  <div class="modal-contenido">
+    <p>¿Salir de tu cuenta?</p>
+    <div class="botones-modal">
+      <button id="btn-si">Sí</button>
+      <button id="btn-no">No</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

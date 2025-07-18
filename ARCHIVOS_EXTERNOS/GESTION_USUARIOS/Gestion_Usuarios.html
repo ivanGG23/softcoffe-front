@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de usuarios</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Softcoffe</h1>
+    <h2>Gestión de usuarios</h2>
+    <button class="btn-agregar">Agregar usuario</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Nombre del Usuario</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="userTable"></tbody>
+    </table>
+  </div>
+
+  <!-- Modal para agregar usuario -->
+  <div class="modal" id="modalAgregar">
+    <div class="modal-content">
+      <h3>Agregar Usuario</h3>
+      <p>Ingresa los datos del empleado para registrarlo</p>
+
+      <form id="formAgregarUsuario" novalidate>
+        <label>Nombre del empleado</label>
+        <input type="text" id="nombre" placeholder="Ingrese el nombre del empleado">
+        <span class="error" id="errorNombre"></span>
+
+        <label>Apellidos</label>
+        <input type="text" id="apellidos" placeholder="Ingrese los apellidos del empleado">
+        <span class="error" id="errorApellidos"></span>
+
+        <label>Teléfono</label>
+        <input type="tel" id="telefono" placeholder="Ingrese el número de teléfono">
+        <span class="error" id="errorTelefono"></span>
+
+        <label>Dirección</label>
+        <input type="text" id="direccion" placeholder="Ingrese el domicilio">
+        <span class="error" id="errorDireccion"></span>
+
+        <label>Contraseña</label>
+        <input type="password" id="contrasena" placeholder="Ingrese una contraseña segura">
+        <span class="error" id="errorContrasena"></span>
+
+        <label>Tipo de empleado</label>
+        <select id="tipoEmpleado">
+          <option value="">Seleccione tipo de empleado</option>
+          <option value="Cajero">Cajero</option>
+          <option value="Barista">Barista</option>
+          <option value="Administrador">Administrador</option>
+        </select>
+        <span class="error" id="errorTipo"></span>
+
+        <button type="submit">Crear Usuario</button>
+        <button type="button" id="cerrarModal">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Ventanas modales -->
+  <div class="confirmacion" id="ventanaConfirmacion">
+    <div class="confirmacion-contenido">
+      <h3>¿Confirma la creación del usuario?</h3>
+      <div class="botones-confirmacion">
+        <button id="btnNo">No</button>
+        <button id="btnSi">Sí</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="exito" id="ventanaExito">
+    <div class="exito-contenido">
+      <p><span class="check">✔</span> Usuario creado con éxito</p>
+    </div>
+  </div>
+
+  <div class="confirmacion" id="confirmacionEliminar">
+    <div class="confirmacion-contenido">
+      <h3>¿Estás seguro de eliminar este usuario?</h3>
+      <div class="botones-confirmacion">
+        <button id="btnEliminarNo">No</button>
+        <button id="btnEliminarSi">Sí</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enlace a script externo -->
+  <script src="script.js"></script>
+</body>
+
+</html>

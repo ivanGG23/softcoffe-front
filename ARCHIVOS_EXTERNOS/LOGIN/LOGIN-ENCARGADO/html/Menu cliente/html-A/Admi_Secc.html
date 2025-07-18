@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bienvenido a SoftCoffe</title>
+  <link rel="stylesheet" href="../css/Admi_Secc.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <img src="../assets/img_A/logo.png" alt="Logo SoftCoffe" class="logo">
+    <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
+  </header>
+
+  <main class="hero">
+    <a href="Catal_Y_Inven.html" class="card">
+      <img src="../assets/Admi_Secc/productos.jpg" alt="Productos">
+      <div class="card-text">Productos</div>
+    </a>
+
+    <a href="Gestion_Usuarios.html" class="card">
+      <img src="../assets/Admi_Secc/usuarios.jpg" alt="Gestión de usuarios">
+      <div class="card-text">Gestión de usuarios</div>
+    </a>
+    <a href="Estadistico/Datos estadisticos.html" class="card">
+      <img src="../assets/Admi_Secc/estadistica.jpg" alt="Estadistíca">
+      <div class="card-text">Estadistíca</div>
+    </a>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="logoutModal">
+    <div class="modal-content">
+      <h2>Cerrar sesión</h2>
+      <div class="modal-buttons">
+        <button id="cancelBtn" class="btn red">No</button>
+        <button id="confirmBtn" class="btn green">Sí</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enlace al archivo JavaScript externo -->
+  <script src="../js/Admi_Secc.js"></script>
+</body>
+</html>

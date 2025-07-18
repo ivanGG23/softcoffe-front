@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Preparar</title>
+  <link rel="stylesheet" href="../css/productos2.css" />
+</head>
+<body>
+  <!-- Encabezado -->
+  <header class="main-header">
+    <div class="logo-container">
+      <img src="../img/LogoSoftCoffee.png" alt="Logo SoftCoffe" class="logo" />
+    </div>
+    <div class="header-right">
+      <a href="#confirmationPopup" class="logout-button">Cerrar sesión</a>
+    </div>
+  </header>
+
+  <!-- Pestañas -->
+  <nav class="tabs">
+    <button class="tab active">Pendientes</button>
+    <div class="tab-icons">
+      <img src="../../img/refresh.png" alt="Reloj" />
+      <img src="../../img/notificacion.png" alt="Campana" />
+    </div>
+  </nav>
+
+  <!-- Tarjetas de pedidos -->
+  <main class="orders-grid">
+    <!-- Varias tarjetas iguales (solo mostraré una como ejemplo) -->
+    <div class="order-card">
+      <p><strong>Pedido #074</strong></p>
+      <p>Hugo Sanchez</p>
+      <!-- Redirige a detalle-pedido.html -->
+      <a href="../html/detalle-pedido.html" class="prepare-btn">Ver pedido</a>
+    </div>
+
+    <!-- Copias exactas (puedes repetir o generar más dinámicamente) -->
+    <div class="order-card">
+      <p><strong>Pedido #074</strong></p>
+      <p>Hugo Sanchez</p>
+      <a href="../html/detalle-pedido.html" class="prepare-btn">Ver pedido</a>
+    </div>
+
+    <div class="order-card">
+      <p><strong>Pedido #074</strong></p>
+      <p>Hugo Sanchez</p>
+      <a href="../html/detalle-pedido.html" class="prepare-btn">Ver pedido</a>
+    </div>
+
+    <!-- ... repite según necesites ... -->
+  </main>
+
+  <!-- Popup de confirmación -->
+  <div id="confirmationPopup" class="confirmation-popup">
+    <div class="popup-content">
+      <p>Cerrar sesión</p>
+      <div class="popup-buttons">
+        <a href="#" class="popup-button no-button">No</a>
+        <a href="../../../../index.html" class="popup-button yes-button">Sí</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

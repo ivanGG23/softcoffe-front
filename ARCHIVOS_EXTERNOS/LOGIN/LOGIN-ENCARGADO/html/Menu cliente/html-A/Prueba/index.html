@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario - SoftCoffe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="inventario.css">
+</head>
+
+<body>
+
+    <header>
+        <img src="../assets/img_A/logo.png" alt="Logo de SoftCoffe">
+    </header>
+
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar producto...">
+            <span class="material-icons">search</span>
+        </div>
+        <button id="btnAgregar"><i class="material-icons">add_circle_outline</i> Agregar</button>
+        <button id="btnEditar"><i class="material-icons">edit</i> Editar</button>
+        <button id="btnEliminar"><i class="material-icons">delete_outline</i> Eliminar</button>
+        <button id="btnNuevoInsumo"><i class="material-icons">playlist_add</i> Nuevo insumo</button>
+        <button id="btnCambiarVista"><i class="material-icons">swap_horiz</i> Cambiar vista</button>
+    </section>
+
+    <!-- Tabla de Inventario -->
+    <div class="contenedor-tabla" id="vistaInventario">
+        <table id="tablaProductos">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nombre del producto</th>
+                    <th>Cantidad</th>
+                    <th>Fecha de caducidad</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Tabla de Insumos -->
+    <div class="contenedor-tabla" id="vistaInsumos" style="display: none;">
+        <table id="tablaInsumos">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Código insumo</th>
+                    <th>Producto</th>
+                    <th>Unidad de medida</th>
+                    <th>Nombre del insumo</th>
+                    <th>Presentación</th>
+                    <th>Contenido</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Modal para Agregar/Editar Producto -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalTitle">Agregar producto</div>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="nombre">Nombre del producto</label>
+                    <input type="text" id="nombre" />
+                    <div class="error-message" id="errorNombre">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label for="cantidad">Cantidad</label>
+                    <input type="number" id="cantidad" />
+                    <div class="error-message" id="errorCantidad">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha de caducidad</label>
+                    <input type="date" id="fecha" />
+                    <div class="error-message" id="errorFecha">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" step="0.01" />
+                    <div class="error-message" id="errorPrecio">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" id="btnCancelar">Cancelar</button>
+                    <button class="btn-submit" id="btnGuardar">Guardar</button>
+                </div>
+                <div class="global-error" id="globalError">Por favor, completa todos los campos.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Confirmar Eliminación -->
+    <div id="modalEliminar" class="modal delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">¿Estás seguro de eliminar este producto?</div>
+            <div class="delete-actions">
+                <button class="btn-no" id="btnNo">No</button>
+                <button class="btn-si" id="btnSi">Sí</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Agregar Insumo -->
+    <div id="modalInsumo" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modalInsumoTitle">Agregar insumo</div>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="codigoInsumo">Código del insumo</label>
+                    <input type="number" id="codigoInsumo" />
+                    <div class="error-message" id="errorCodigoInsumo">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label for="unidadMedida">Unidad de medida</label>
+                    <input type="text" id="unidadMedida" />
+                    <div class="error-message" id="errorUnidadMedida">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label for="nombreInsumo">Nombre del insumo</label>
+                    <input type="text" id="nombreInsumo" />
+                    <div class="error-message" id="errorNombreInsumo">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label for="presentacion">Presentación</label>
+                    <input type="text" id="presentacion" />
+                    <div class="error-message" id="errorPresentacion">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label for="contenido">Contenido</label>
+                    <input type="number" id="contenido" min="1" />
+                    <div class="error-message" id="errorContenido">Debe ser mayor a 0.</div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn-cancel" id="btnSalirInsumo">Salir</button>
+                    <button class="btn-submit" id="btnAgregarInsumo">Agregar</button>
+                </div>
+                <div class="global-error" id="globalErrorInsumo">Por favor, completa todos los campos correctamente.
+                </div>
+                <div class="success-message" id="successInsumo">¡Insumo agregado correctamente!</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="inventario.js"></script>
+    <script src="insumo.js"></script>
+</body>
+
+</html>
