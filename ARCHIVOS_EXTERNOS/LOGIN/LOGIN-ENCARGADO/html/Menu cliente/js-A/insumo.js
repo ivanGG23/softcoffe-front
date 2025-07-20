@@ -39,6 +39,7 @@ async function cargarInsumosDesdeAPI() {
 function seleccionarInsumo(index, filaHTML) {
     tablaInsumos.querySelectorAll("tr").forEach(row => row.classList.remove("selected-row"));
     filaHTML.classList.add("selected-row");
+    insumoSeleccionado = index; // ← esta línea es la clave que faltaba
 }
 
 // ✅ Función de validación de campos del insumo
@@ -68,21 +69,57 @@ function validarFormularioInsumo() {
     return valido;
 }
 
-// ✅ Botón para agregar insumo
+// Botón para agregar insumo
 document.getElementById("btnAgregarInsumo").onclick = async () => {
     if (!validarFormularioInsumo()) return;
 
+    // 🚧 Modo edición de insumo
+    if (insumoModo === "editar") {
+        const codigo = parseInt(document.getElementById("codigoInsumo").value);
+
+        const insumoEditado = {
+            unidad: document.getElementById("unidadMedida").value,
+            nombre: document.getElementById("nombreInsumo").value,
+            presentacion: document.getElementById("presentacion").value,
+            contenido: parseInt(document.getElementById("contenido").value)
+        };
+
+        try {
+            const response = await fetch(`http://localhost:7000/insumos/${codigo}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(insumoEditado)
+            });
+
+            const msg = await response.text();
+            console.log("Respuesta al editar:", msg);
+
+            await cargarInsumosDesdeAPI();
+            modalInsumo.style.display = "none";
+            insumoSeleccionado = null;
+            productoActualParaInsumo = null;
+
+        } catch (error) {
+            console.error("Error al editar insumo:", error);
+            alert("No se pudo editar el insumo.");
+        }
+
+        return; // ⛔ Importante: no ejecutar la lógica de "agregar"
+    }
+
+    // 🆕 Modo agregar insumo
     const nuevoInsumo = {
         codigo: parseInt(document.getElementById("codigoInsumo").value),
         idProducto: productoActualParaInsumo?.id,
         unidad: document.getElementById("unidadMedida").value,
         nombre: document.getElementById("nombreInsumo").value,
         presentacion: document.getElementById("presentacion").value,
-        contenido: parseInt(document.getElementById("contenido").value)
+        contenido: parseInt(document.getElementById("contenido").value),
+        estado: "existente"
     };
 
-    if (!nuevoInsumo.idProducto) {
-        alert("No hay un producto asociado para este insumo.");
+    if (!nuevoInsumo.idProducto || isNaN(nuevoInsumo.idProducto)) {
+        alert("Error: no hay producto válido asociado al insumo.");
         return;
     }
 
@@ -96,11 +133,17 @@ document.getElementById("btnAgregarInsumo").onclick = async () => {
         const resultado = await response.text();
         console.log("Respuesta del servidor:", resultado);
 
+        if (!response.ok) {
+            alert("Error del servidor: " + resultado);
+            return;
+        }
+
         document.getElementById("successInsumo").style.display = "block";
 
         await cargarInsumosDesdeAPI();
         productoActualParaInsumo = null;
         insumoSeleccionado = null;
+
         setTimeout(() => {
             document.getElementById("successInsumo").style.display = "none";
             document.getElementById("modalInsumo").style.display = "none";

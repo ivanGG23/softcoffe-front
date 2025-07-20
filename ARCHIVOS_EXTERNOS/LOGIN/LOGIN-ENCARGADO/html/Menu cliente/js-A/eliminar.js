@@ -12,7 +12,7 @@ btnEliminar.onclick = () => {
 btnSi.onclick = () => {
     if (vistaInsumos.style.display !== "none") {
         const codigo = insumosDesdeAPI[insumoSeleccionado].codigo;
-        fetch(`http://localhost:7000/insumos/${codigo}`, { method: "DELETE" })
+        fetch(`http://localhost:7000/insumos/${codigo}/estado`, { method: "PUT" }) // CORREGIDO
         .then(res => res.text())
         .then(msg => {
             console.log(msg);
@@ -21,7 +21,7 @@ btnSi.onclick = () => {
         });
     } else {
         const id = productos[productoSeleccionado].id;
-        fetch(`http://localhost:7000/inventario/${id}`, { method: "DELETE" })
+        fetch(`http://localhost:7000/inventario/${id}/estado`, { method: "PUT" }) // CORREGIDO
         .then(res => res.text())
         .then(msg => {
             console.log(msg);
@@ -32,6 +32,7 @@ btnSi.onclick = () => {
 
     modalEliminar.style.display = "none";
 };
+
 
 btnNo.onclick = () => {
     modalEliminar.style.display = "none";
