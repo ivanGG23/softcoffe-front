@@ -1,160 +1,420 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const contenedorProductos = document.getElementById("contenedor-productos");
-  const modalEditar = document.getElementById("modal-editar");
-  const modalAgregar = document.getElementById("modal-agregar");
-  const formEditar = document.getElementById("form-editar");
-  const formAgregar = document.getElementById("form-agregar");
-  const botonesCategorias = document.querySelectorAll("nav button");
+function mostrarProductos(categoria) {
+  console.log("📦 Mostrando categoría:", categoria);
+  console.log("🧩 Productos encontrados:", productosData[categoria]);
 
+  contenedorProductos.innerHTML = "";
+  botonesCategorias.forEach(btn => {
+    btn.classList.remove("active");
+    if (btn.dataset.categoria === categoria) {
+      btn.classList.add("active");
+    }
+  });
 
-  const productosData = {
-    promos: [
-      {
-        id: 1,
-        nombre: "Combo Desayuno",
-        precio: 120,
-        imagen: "img/promo1.jpg",
-        descripcion: "Café + Pan dulce",
-        categoria: "promos"
-      },
-      {
-        id: 2,
-        nombre: "Promo Merienda",
-        precio: 75,
-        imagen: "img/promo2.jpg",
-        descripcion: "Café + 2 medialunas",
-        categoria: "promos"
+  if (productosData[categoria] && productosData[categoria].length > 0) {
+    productosData[categoria].forEach(producto => {
+      const div = document.createElement("div");
+      div.classList.add("producto");
+      div.dataset.id = producto.id;
+      div.innerHTML = `
+        <img src="${producto.imagen}" class="imagen-producto" alt="${producto.nombre}">
+        <h3>${producto.nombre}</h3>
+        <p>$${producto.precio}</p>
+        <p><strong>Insumos:</strong> ${producto.insumos ? producto.insumos.join(", ") : "—"}</p>
+        <div class="acciones">
+          <button class="editar-btn" data-id="${producto.id}"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
+          <button class="eliminar-producto" data-id="${producto.id}"><i class="fa-solid fa-trash"></i> Eliminar</button>
+        </div>`;
+      div.querySelector(".editar-btn").addEventListener("click", () => abrirModalEditar(producto.id));
+      div.querySelector(".eliminar-producto").addEventListener("click", () => eliminarProducto(producto));
+      contenedorProductos.appendChild(div);
+    });
+  } else {
+    contenedorProductos.innerHTML = `<p class="mensaje-vacio">No hay productos disponibles en esta categoría</p>`;
+  }
+
+  agregarBotonAgregar();
+}
+
+function agregarBotonAgregar() {
+  const agregar = document.createElement("div");
+  agregar.classList.add("producto", "agregar");
+  agregar.innerHTML = `<i class="fa-solid fa-plus"></i><p>Agregar Producto</p>`;
+  agregar.addEventListener("click", () => {
+    formAgregar.reset();
+    document.getElementById("imagen-agregar").src = "";
+    document.getElementById("imagen-agregar").dataset.url = "";
+    modalAgregar.style.display = "flex";
+  });
+  contenedorProductos.appendChild(agregar);
+}
+
+async function cargarProductosDesdeAPI() {
+  try {
+    const res = await fetch("http://localhost:7000/productos");
+    const productos = await res.json();
+
+    for (const cat of ["promociones", "cafe", "frappe", "te", "postre"]) {
+      productosData[cat] = [];
+    }
+
+    productos.forEach(p => {
+      if (!productosData[p.categoria]) {
+        productosData[p.categoria] = [];
       }
-    ]
+      productosData[p.categoria].push(p);
+    });
+
+    mostrarProductos("promociones");
+  } catch (error) {
+    console.error("Error al cargar productos:", error);
+  }
+}
+
+async function cargarCategoriasDesdeAPI() {
+  try {
+    const res = await fetch("http://localhost:7000/categorias");
+    const categorias = await res.json();
+
+    const selectAgregar = document.getElementById("agregar-categoria");
+    const selectEditar = document.getElementById("editar-categoria");
+
+    selectAgregar.innerHTML = '<option value="">Selecciona una categoría</option>';
+    selectEditar.innerHTML = '<option value="">Selecciona una categoría</option>';
+
+    categorias.forEach(cat => {
+      const optionAgregar = document.createElement("option");
+      optionAgregar.value = cat.id;
+      optionAgregar.textContent = cat.nombre;
+      selectAgregar.appendChild(optionAgregar);
+
+      const optionEditar = optionAgregar.cloneNode(true);
+      selectEditar.appendChild(optionEditar);
+    });
+  } catch (error) {
+    console.error("Error al cargar categorías:", error);
+  }
+}
+
+// ✅ FUNCIÓN AGREGADA: cargar insumos para el modal de agregar
+async function cargarInsumosDesdeAPI() {
+  try {
+    const res = await fetch("http://localhost:7000/insumos");
+    const insumos = await res.json();
+    const contenedor = document.getElementById("resumen-insumos");
+    contenedor.innerHTML = "";
+
+    insumos.forEach(insumo => {
+      const chip = document.createElement("span");
+      chip.classList.add("chip-insumo");
+      chip.textContent = insumo.nombre;
+      chip.dataset.nombre = insumo.nombre;
+      contenedor.appendChild(chip);
+    });
+
+  } catch (error) {
+    console.error("Error al cargar insumos:", error);
+  }
+}
+
+let insumosSeleccionados = [];
+const productosData = {};
+const contenedorProductos = document.getElementById("contenedor-productos");
+const botonesCategorias = document.querySelectorAll("nav button");
+const modalAgregar = document.getElementById("modal-agregar");
+const formAgregar = document.getElementById("form-agregar");
+const modalEditar = document.getElementById("modal-editar");
+
+document.getElementById("btn-elegir-insumos").addEventListener("click", async () => {
+  try {
+    const res = await fetch("http://localhost:7000/insumos");
+    const insumos = await res.json();
+    const contenedor = document.getElementById("contenedor-insumos-modal"); // 👈 este sí es correcto
+    contenedor.innerHTML = "";
+
+    insumos.forEach(insumo => {
+      const label = document.createElement("label");
+      label.classList.add("checkbox-option");
+      label.innerHTML = `
+        <input type="checkbox" value="${insumo.nombre}" ${insumosSeleccionados.includes(insumo.nombre) ? "checked" : ""}>
+        ${insumo.nombre} (${insumo.presentacion} - ${insumo.unidad}, ${insumo.contenido})
+      `;
+      contenedor.appendChild(label);
+    });
+
+    document.getElementById("modal-insumos").style.display = "flex";
+  } catch (err) {
+    console.error("Error al cargar insumos:", err);
+  }
+});
+
+document.getElementById("btn-confirmar-insumos").addEventListener("click", () => {
+  const seleccionados = document.querySelectorAll("#contenedor-insumos-modal input:checked");
+  const chips = Array.from(seleccionados).map(cb => cb.value);
+
+  // Detectar si estamos en el formulario de edición
+  const estaEditando = modalEditar.style.display === "flex";
+
+  // Seleccionar el contenedor correcto
+  const contenedorResumen = estaEditando
+    ? document.getElementById("resumen-insumos-editar")
+    : document.getElementById("resumen-insumos");
+
+  contenedorResumen.innerHTML = "";
+  insumosSeleccionados = chips;
+
+  chips.forEach(nombre => {
+    const chip = document.createElement("span");
+    chip.classList.add("chip-insumo");
+    chip.textContent = nombre;
+    chip.dataset.nombre = nombre;
+    contenedorResumen.appendChild(chip);
+  });
+
+  document.getElementById("modal-insumos").style.display = "none";
+});
+
+async function abrirModalEditar(id) {
+  productoActual = Object.values(productosData).flat().find(p => p.id === id);
+
+  if (productoActual) {
+    document.getElementById("editar-nombre").value = productoActual.nombre;
+    document.getElementById("editar-precio").value = productoActual.precio;
+    document.getElementById("editar-categoria").value = productoActual.categoria;
+    document.getElementById("editar-descripcion").value = productoActual.descripcion || "";
+    document.getElementById("imagen-actual").src = productoActual.imagen || "";
+    document.getElementById("imagen-actual").dataset.url = productoActual.imagen || "";
+
+    // ✅ Mostrar chips de insumos seleccionados
+    const resumen = document.getElementById("resumen-insumos-editar");
+    resumen.innerHTML = "";
+    productoActual.insumos.forEach(nombre => {
+      const chip = document.createElement("span");
+      chip.classList.add("chip-insumo");
+      chip.textContent = nombre;
+      resumen.appendChild(chip);
+    });
+
+    // ✅ Mostrar modal
+    modalEditar.style.display = "flex";
+
+    // ✅ Asignar comportamiento al botón de guardar
+    document.getElementById("guardar-btn").onclick = () => guardarCambiosProducto(productoActual.id);
+  }
+}
+
+async function guardarCambiosProducto(idProducto) {
+  const nombre = document.getElementById("editar-nombre").value.trim();
+  const precio = parseFloat(document.getElementById("editar-precio").value);
+  const categoria = parseInt(document.getElementById("editar-categoria").value);
+  const descripcion = document.getElementById("editar-descripcion").value.trim();
+  const imagen = document.getElementById("imagen-actual").dataset.url || "img/default.jpg";
+
+  // ✅ Nuevo bloque para leer chips en vez de checkboxes
+  const chips = document.querySelectorAll("#resumen-insumos-editar .chip-insumo");
+  const insumosSeleccionados = Array.from(chips).map(chip => chip.textContent);
+
+  // Validación básica
+  if (!nombre || isNaN(precio) || precio <= 0 || !categoria || insumosSeleccionados.length === 0) {
+    alert("Por favor, completa todos los campos correctamente.");
+    return;
+  }
+
+  const datosEditados = {
+    id: idProducto,
+    nombre,
+    precio,
+    categoriaId: categoria,
+    descripcion,
+    imagen,
+    insumos: insumosSeleccionados
   };
 
+  try {
+    const res = await fetch(`http://localhost:7000/menu/${idProducto}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(datosEditados)
+    });
+
+    if (res.ok) {
+      alert("Producto actualizado correctamente");
+      modalEditar.style.display = "none";
+      cargarProductosDesdeAPI(); // Recarga la vista
+    } else {
+      const error = await res.text();
+      alert("Error al actualizar: " + error);
+    }
+  } catch (err) {
+    console.error("Error al enviar datos editados:", err);
+    alert("Error de conexión con el servidor");
+  }
+}
+
+async function eliminarProducto(producto) {
+  const confirmar = confirm(`¿Seguro que deseas eliminar "${producto.nombre}"?`);
+  if (!confirmar) return;
+
+  try {
+    const res = await fetch(`http://localhost:7000/menu/${producto.id}`, {
+      method: "DELETE"
+    });
+
+    if (res.ok) {
+      alert(`"${producto.nombre}" eliminado correctamente.`);
+      cargarProductosDesdeAPI(); // Recarga la vista desde el backend
+    } else {
+      const error = await res.text();
+      alert("Error al eliminar: " + error);
+    }
+  } catch (err) {
+    console.error("Error al eliminar producto:", err);
+    alert("No se pudo conectar con el servidor");
+  }
+}
+
+document.getElementById("btn-elegir-insumos-editar").addEventListener("click", async () => {
+  try {
+    const res = await fetch("http://localhost:7000/insumos");
+    const insumos = await res.json();
+    const contenedor = document.getElementById("contenedor-insumos-modal");
+    contenedor.innerHTML = "";
+
+    insumos.forEach(insumo => {
+      const label = document.createElement("label");
+      label.classList.add("checkbox-option");
+      label.innerHTML = `
+        <input type="checkbox" value="${insumo.nombre}" ${productoActual.insumos?.includes(insumo.nombre) ? "checked" : ""
+        }>
+        ${insumo.nombre} (${insumo.presentacion} - ${insumo.unidad}, ${insumo.contenido})
+      `;
+      contenedor.appendChild(label);
+    });
+
+    document.getElementById("modal-insumos").style.display = "flex";
+
+  } catch (err) {
+    console.error("Error al abrir modal de insumos:", err);
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  cargarCategoriasDesdeAPI();
+  cargarProductosDesdeAPI();
+  const formEditar = document.getElementById("form-editar");
+
+  const insumosData = {
+    promos: ["Pan dulce", "Medialunas", "Jugo"],
+    cafe: ["Granos", "Leche", "Azúcar"],
+    frappe: ["Hielo", "Crema batida", "Chocolate"],
+    te: ["Té verde", "Té negro", "Limón"],
+    postres: ["Harina", "Chocolate", "Frutas"]
+  };
 
   let productoActual = null;
   let siguienteId = 3;
 
+  formAgregar.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-  function mostrarProductos(categoria) {
-    contenedorProductos.innerHTML = "";
-    botonesCategorias.forEach(btn => {
-      btn.classList.remove("active");
-      if (btn.dataset.categoria === categoria) {
-        btn.classList.add("active");
-      }
-    });
+    const nombre = document.getElementById("agregar-nombre").value.trim();
+    const precio = parseFloat(document.getElementById("agregar-precio").value);
+    const categoria = document.getElementById("agregar-categoria").value;
+    const descripcion = document.getElementById("agregar-descripcion").value.trim();
+    const imgPreview = document.getElementById("imagen-agregar");
+    const imagenUrl = imgPreview.dataset.url || "img/default.jpg";
 
+    const chips = document.querySelectorAll("#resumen-insumos .chip-insumo");
+    const insumosSeleccionados = Array.from(chips).map(chip => chip.textContent);
 
-    if (productosData[categoria]) {
-      productosData[categoria].forEach(producto => {
-        const div = document.createElement("div");
-        div.classList.add("producto");
-        div.dataset.id = producto.id;
-        div.innerHTML = `
-          <img src="${producto.imagen}" class="imagen-producto" alt="${producto.nombre}">
-          <h3>${producto.nombre}</h3>
-          <p>$${producto.precio}</p>
-          <div class="acciones">
-            <button class="editar-btn" data-id="${producto.id}"><i class="fa-solid fa-pen-to-square"></i> Editar</button>
-            <button class="eliminar-producto" data-id="${producto.id}"><i class="fa-solid fa-trash"></i> Eliminar</button>
-          </div>`;
-
-
-        div.querySelector(".editar-btn").addEventListener("click", () => abrirModalEditar(producto.id));
-        div.querySelector(".eliminar-producto").addEventListener("click", () => eliminarProducto(producto));
-
-
-        contenedorProductos.appendChild(div);
-      });
-    }
-
-
-    agregarBotonAgregar();
-  }
-
-
-  function agregarBotonAgregar() {
-    const agregar = document.createElement("div");
-    agregar.classList.add("producto", "agregar");
-    agregar.innerHTML = `<i class="fa-solid fa-plus"></i><p>Agregar Producto</p>`;
-    agregar.addEventListener("click", () => {
-      formAgregar.reset();
-      modalAgregar.style.display = "flex";
-    });
-    contenedorProductos.appendChild(agregar);
-  }
-
-
-  function abrirModalEditar(id) {
-    productoActual = Object.values(productosData).flat().find(p => p.id === id);
-    if (productoActual) {
-      document.getElementById("editar-nombre").value = productoActual.nombre;
-      document.getElementById("editar-precio").value = productoActual.precio;
-      document.getElementById("editar-categoria").value = productoActual.categoria;
-      modalEditar.style.display = "flex";
-    }
-  }
-
-
-  function eliminarProducto(producto) {
-    const index = productosData[producto.categoria].indexOf(producto);
-    if (index !== -1) {
-      productosData[producto.categoria].splice(index, 1);
-      mostrarProductos(producto.categoria);
-    }
-  }
-
-
-formAgregar.addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const nombre = document.getElementById("agregar-nombre").value.trim();
-  const precio = parseFloat(document.getElementById("agregar-precio").value);
-  const categoria = document.getElementById("agregar-categoria").value;
-
-
-  const producto = {
-    nombre,
-    precio,
-    categoria,
-    imagen: "img/default.jpg" // o más adelante con AWS S3
-  };
-
-
-  try {
-    const res = await fetch("http://localhost:7000/producto", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(producto)
-    });
-
-
-    if (res.ok) {
-      alert("Producto guardado en la base de datos");
-      modalAgregar.style.display = "none";
-      mostrarProductos(categoria); // actualiza la vista
+    if (!nombre || isNaN(precio) || !categoria || insumosSeleccionados.length === 0) {
+      document.getElementById("error-general").style.display = "block";
+      return;
     } else {
-      alert("Error al guardar el producto");
+      document.getElementById("error-general").style.display = "none";
     }
-  } catch (err) {
-    console.error("Error en fetch:", err);
-    alert("Error en la conexión con el servidor");
-  }
-});
 
+    const data = {
+      nombre,
+      precio,
+      categoriaId: parseInt(categoria),
+      descripcion,
+      insumos: insumosSeleccionados
+    };
 
+    try {
+      const res = await fetch("http://localhost:7000/menu", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
 
+      if (res.ok) {
+        alert("Producto registrado correctamente");
+        modalAgregar.style.display = "none";
+        mostrarProductos(categoria); // Si quieres recargar la vista
+      } else {
+        const error = await res.text();
+        alert("Error al registrar producto: " + error);
+      }
+    } catch (err) {
+      console.error("Error al enviar datos:", err);
+      alert("Error de conexión con el servidor");
+    }
+  });
 
-  formEditar.addEventListener("submit", function(e) {
+  formEditar.addEventListener("submit", function (e) {
     e.preventDefault();
     if (productoActual) {
       productoActual.nombre = document.getElementById("editar-nombre").value;
       productoActual.precio = parseFloat(document.getElementById("editar-precio").value);
       productoActual.categoria = document.getElementById("editar-categoria").value;
+
+      const checkboxes = document.querySelectorAll("#editar-insumos input[type='checkbox']");
+      const nuevosInsumos = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+      productoActual.insumos = nuevosInsumos;
+
+      productoActual.descripcion = document.getElementById("editar-descripcion").value.trim();
+
+      const imgPreview = document.getElementById("imagen-actual");
+      const nuevaImgUrl = imgPreview.dataset.url;
+      if (nuevaImgUrl) {
+        productoActual.imagen = nuevaImgUrl;
+      }
+
       modalEditar.style.display = "none";
       mostrarProductos(productoActual.categoria);
     }
   });
 
+  document.getElementById("agregar-imagen").addEventListener("change", function () {
+    const file = this.files[0];
+    const preview = document.getElementById("imagen-agregar");
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      preview.src = url;
+      preview.style.display = "block";
+      preview.dataset.url = url;
+    }
+  });
+
+  document.getElementById("editar-imagen").addEventListener("change", function () {
+    const file = this.files[0];
+    const preview = document.getElementById("imagen-actual");
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      preview.src = url;
+      preview.style.display = "block";
+      preview.dataset.url = url;
+    }
+  });
 
   document.querySelectorAll(".cerrar-modal").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -162,18 +422,15 @@ formAgregar.addEventListener("submit", async function(e) {
     });
   });
 
-
   window.addEventListener("click", (e) => {
     if (e.target.classList.contains("modal")) {
       e.target.style.display = "none";
     }
   });
 
-
   botonesCategorias.forEach(btn => {
     btn.addEventListener("click", () => mostrarProductos(btn.dataset.categoria));
   });
-
 
   mostrarProductos("promos");
 });

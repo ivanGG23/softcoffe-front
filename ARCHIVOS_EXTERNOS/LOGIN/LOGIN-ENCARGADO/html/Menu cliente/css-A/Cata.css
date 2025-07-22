@@ -311,3 +311,32 @@ nav button:hover, nav button.active {
   align-items: center;
   gap: 5px;
 }
+
+#contenedor-insumos-modal {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+#resumen-insumos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.chip-insumo {
+  padding: 6px 12px;
+  background-color: #eee;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+#resumen-insumos-editar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 0;
+}
