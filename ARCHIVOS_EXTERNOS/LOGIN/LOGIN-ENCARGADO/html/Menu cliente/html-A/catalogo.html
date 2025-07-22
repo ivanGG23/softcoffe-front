@@ -7,6 +7,7 @@
   <title>Catálogo - SOFTCOFFE</title>
   <link rel="stylesheet" href="../css-A/Cata.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -27,7 +28,6 @@
     <div class="productos" id="contenedor-productos"></div>
   </div>
 
-  <!-- Modal Editar -->
   <div id="modal-editar" class="modal">
     <div class="modal-contenido">
       <span class="cerrar-modal" style="cursor: pointer; float: right;">&times;</span>
@@ -57,7 +57,6 @@
             <i class="fa-solid fa-box-open"></i> Elegir insumos
           </button>
           <div id="resumen-insumos-editar" class="resumen-chips">
-            <!-- Chips van aquí -->
           </div>
         </div>
         <div class="form-group">
@@ -69,8 +68,9 @@
           <label>Imagen del producto</label>
           <label class="file-input-label" style="cursor: pointer;">
             <i class="fa-solid fa-image"></i> Seleccionar imagen (jpg, png)
-            <input type="file" id="editar-imagen" class="file-input" accept="image/*" style="display: none;">
+            <input type="file" id="agregar-imagen" class="file-input" accept="image/*" style="display: none;">
           </label>
+          <p id="estado-upload" style="color: #cc0000; font-weight: bold;"></p>
         </div>
         <div class="imagen-preview-container">
           <img id="imagen-actual" class="imagen-preview" alt="Imagen actual">
@@ -82,7 +82,6 @@
     </div>
   </div>
 
-  <!-- Modal Agregar -->
   <div id="modal-agregar" class="modal">
     <div class="modal-contenido">
       <span class="cerrar-modal" style="cursor: pointer; float: right;">&times;</span>
@@ -113,14 +112,12 @@
           <div id="error-categoria" class="error-message">Selecciona una categoría válida</div>
         </div>
 
-        <!-- ✅ Sección correcta de insumos (modal activado con chips) -->
         <div class="form-group" id="contenedor-insumos">
           <label>Seleccionar insumos</label>
           <button type="button" id="btn-elegir-insumos" class="btn-elegir-insumos">
             <i class="fa-solid fa-box-open"></i> Elegir insumos
           </button>
           <div id="resumen-insumos" class="resumen-chips">
-            <!-- Aquí se mostrarán los insumos seleccionados como chips -->
           </div>
           <div id="error-insumo" class="error-message">Selecciona al menos un insumo</div>
         </div>
@@ -135,8 +132,9 @@
           <label>Imagen del producto</label>
           <label class="file-input-label" style="cursor: pointer;">
             <i class="fa-solid fa-image"></i> Seleccionar imagen (jpg, png)
-            <input type="file" id="agregar-imagen" class="file-input" accept="image/*" style="display: none;">
+            <input type="file" id="editar-imagen" class="file-input" accept="image/*" style="display: none;">
           </label>
+          <p id="estado-upload" style="color: #cc0000; font-weight: bold;"></p>
         </div>
 
         <div class="imagen-preview-container">
@@ -152,14 +150,15 @@
     </div>
   </div>
 
-  <!-- Modal Insumos -->
+
+
+
   <div id="modal-insumos" class="modal">
     <div class="modal-contenido">
       <span class="cerrar-modal" style="cursor: pointer;">&times;</span>
       <h2><i class="fa-solid fa-boxes-stacked"></i> Seleccionar insumos</h2>
 
       <div id="contenedor-insumos-modal" class="checkbox-group">
-        <!-- Aquí se insertan los insumos dinámicamente -->
       </div>
 
       <button id="btn-confirmar-insumos" class="btn-guardar" style="margin-top: 20px;">

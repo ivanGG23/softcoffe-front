@@ -16,7 +16,7 @@ function mostrarProductos(categoria) {
       div.classList.add("producto");
       div.dataset.id = producto.id;
       div.innerHTML = `
-        <img src="${producto.imagen}" class="imagen-producto" alt="${producto.nombre}">
+        <img src="${producto.img_url || 'img/default.jpg'}" class="imagen-producto" alt="${producto.nombre}">
         <h3>${producto.nombre}</h3>
         <p>$${producto.precio}</p>
         <p><strong>Insumos:</strong> ${producto.insumos ? producto.insumos.join(", ") : "—"}</p>
@@ -41,6 +41,7 @@ function agregarBotonAgregar() {
   agregar.innerHTML = `<i class="fa-solid fa-plus"></i><p>Agregar Producto</p>`;
   agregar.addEventListener("click", () => {
     formAgregar.reset();
+    document.querySelector("#resumen-insumos").innerHTML = "";
     document.getElementById("imagen-agregar").src = "";
     document.getElementById("imagen-agregar").dataset.url = "";
     modalAgregar.style.display = "flex";
@@ -95,40 +96,30 @@ async function cargarCategoriasDesdeAPI() {
   }
 }
 
-// ✅ FUNCIÓN AGREGADA: cargar insumos para el modal de agregar
 async function cargarInsumosDesdeAPI() {
   try {
     const res = await fetch("http://localhost:7000/insumos");
-    const insumos = await res.json();
+    await res.json();
     const contenedor = document.getElementById("resumen-insumos");
-    contenedor.innerHTML = "";
-
-    insumos.forEach(insumo => {
-      const chip = document.createElement("span");
-      chip.classList.add("chip-insumo");
-      chip.textContent = insumo.nombre;
-      chip.dataset.nombre = insumo.nombre;
-      contenedor.appendChild(chip);
-    });
-
+    if (contenedor) contenedor.innerHTML = "";
   } catch (error) {
     console.error("Error al cargar insumos:", error);
   }
 }
-
+//---------------------------------------------------------------------------------------------------------------------------
 let insumosSeleccionados = [];
 const productosData = {};
 const contenedorProductos = document.getElementById("contenedor-productos");
 const botonesCategorias = document.querySelectorAll("nav button");
-const modalAgregar = document.getElementById("modal-agregar");
 const formAgregar = document.getElementById("form-agregar");
+const modalAgregar = document.getElementById("modal-agregar");
 const modalEditar = document.getElementById("modal-editar");
 
 document.getElementById("btn-elegir-insumos").addEventListener("click", async () => {
   try {
     const res = await fetch("http://localhost:7000/insumos");
     const insumos = await res.json();
-    const contenedor = document.getElementById("contenedor-insumos-modal"); // 👈 este sí es correcto
+    const contenedor = document.getElementById("contenedor-insumos-modal");
     contenedor.innerHTML = "";
 
     insumos.forEach(insumo => {
@@ -151,24 +142,21 @@ document.getElementById("btn-confirmar-insumos").addEventListener("click", () =>
   const seleccionados = document.querySelectorAll("#contenedor-insumos-modal input:checked");
   const chips = Array.from(seleccionados).map(cb => cb.value);
 
-  // Detectar si estamos en el formulario de edición
   const estaEditando = modalEditar.style.display === "flex";
-
-  // Seleccionar el contenedor correcto
-  const contenedorResumen = estaEditando
-    ? document.getElementById("resumen-insumos-editar")
-    : document.getElementById("resumen-insumos");
-
-  contenedorResumen.innerHTML = "";
   insumosSeleccionados = chips;
 
-  chips.forEach(nombre => {
-    const chip = document.createElement("span");
-    chip.classList.add("chip-insumo");
-    chip.textContent = nombre;
-    chip.dataset.nombre = nombre;
-    contenedorResumen.appendChild(chip);
-  });
+  if (estaEditando) {
+    const contenedorResumen = document.getElementById("resumen-insumos-editar");
+    contenedorResumen.innerHTML = "";
+
+    chips.forEach(nombre => {
+      const chip = document.createElement("span");
+      chip.classList.add("chip-insumo");
+      chip.textContent = nombre;
+      chip.dataset.nombre = nombre;
+      contenedorResumen.appendChild(chip);
+    });
+  }
 
   document.getElementById("modal-insumos").style.display = "none";
 });
@@ -184,7 +172,6 @@ async function abrirModalEditar(id) {
     document.getElementById("imagen-actual").src = productoActual.imagen || "";
     document.getElementById("imagen-actual").dataset.url = productoActual.imagen || "";
 
-    // ✅ Mostrar chips de insumos seleccionados
     const resumen = document.getElementById("resumen-insumos-editar");
     resumen.innerHTML = "";
     productoActual.insumos.forEach(nombre => {
@@ -194,10 +181,8 @@ async function abrirModalEditar(id) {
       resumen.appendChild(chip);
     });
 
-    // ✅ Mostrar modal
     modalEditar.style.display = "flex";
 
-    // ✅ Asignar comportamiento al botón de guardar
     document.getElementById("guardar-btn").onclick = () => guardarCambiosProducto(productoActual.id);
   }
 }
@@ -209,11 +194,9 @@ async function guardarCambiosProducto(idProducto) {
   const descripcion = document.getElementById("editar-descripcion").value.trim();
   const imagen = document.getElementById("imagen-actual").dataset.url || "img/default.jpg";
 
-  // ✅ Nuevo bloque para leer chips en vez de checkboxes
   const chips = document.querySelectorAll("#resumen-insumos-editar .chip-insumo");
   const insumosSeleccionados = Array.from(chips).map(chip => chip.textContent);
 
-  // Validación básica
   if (!nombre || isNaN(precio) || precio <= 0 || !categoria || insumosSeleccionados.length === 0) {
     alert("Por favor, completa todos los campos correctamente.");
     return;
@@ -241,7 +224,7 @@ async function guardarCambiosProducto(idProducto) {
     if (res.ok) {
       alert("Producto actualizado correctamente");
       modalEditar.style.display = "none";
-      cargarProductosDesdeAPI(); // Recarga la vista
+      cargarProductosDesdeAPI();
     } else {
       const error = await res.text();
       alert("Error al actualizar: " + error);
@@ -263,7 +246,7 @@ async function eliminarProducto(producto) {
 
     if (res.ok) {
       alert(`"${producto.nombre}" eliminado correctamente.`);
-      cargarProductosDesdeAPI(); // Recarga la vista desde el backend
+      cargarProductosDesdeAPI();
     } else {
       const error = await res.text();
       alert("Error al eliminar: " + error);
@@ -298,10 +281,12 @@ document.getElementById("btn-elegir-insumos-editar").addEventListener("click", a
     console.error("Error al abrir modal de insumos:", err);
   }
 });
-
+//--------------------------------------------------------------------------------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", () => {
   cargarCategoriasDesdeAPI();
   cargarProductosDesdeAPI();
+  cargarInsumosDesdeAPI();
+
   const formEditar = document.getElementById("form-editar");
 
   const insumosData = {
@@ -322,11 +307,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const precio = parseFloat(document.getElementById("agregar-precio").value);
     const categoria = document.getElementById("agregar-categoria").value;
     const descripcion = document.getElementById("agregar-descripcion").value.trim();
-    const imgPreview = document.getElementById("imagen-agregar");
-    const imagenUrl = imgPreview.dataset.url || "img/default.jpg";
-
-    const chips = document.querySelectorAll("#resumen-insumos .chip-insumo");
-    const insumosSeleccionados = Array.from(chips).map(chip => chip.textContent);
+    const fileInput = document.getElementById("agregar-imagen");
+    const imagenUrl = "img/default.jpg";
 
     if (!nombre || isNaN(precio) || !categoria || insumosSeleccionados.length === 0) {
       document.getElementById("error-general").style.display = "block";
@@ -355,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (res.ok) {
         alert("Producto registrado correctamente");
         modalAgregar.style.display = "none";
-        mostrarProductos(categoria); // Si quieres recargar la vista
+        mostrarProductos(categoria);
       } else {
         const error = await res.text();
         alert("Error al registrar producto: " + error);
