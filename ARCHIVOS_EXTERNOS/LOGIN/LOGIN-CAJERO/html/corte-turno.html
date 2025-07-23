@@ -16,8 +16,8 @@
       <img src="../../img/LogoSoftCoffee.png" class="logo" alt="Logo">
     </div>
     <span class="marca"></span>
-    <div class="contenedor-cerrar-sesion">
-      <a href="#modalCerrarSesion" class="cerrar-sesion">Cerrar sesión</a>
+    <div class="cerrar-sesion">
+      <button onclick="window.location.href='menu-cajero.html'">Regresar</button>
     </div>
   </header>
 
@@ -25,20 +25,20 @@
     <div class="overlay"></div>
 
     <section class="formulario">
-      <h2><span class="flecha">&#x2190;</span> Corte de turno</h2>
+      <h2>Corte de turno</h2>
       <p>Termina tu turno llenando los siguientes datos.</p>
 
       <form action="#modalCorteFinalizado" id="corteTurnoForm">
         <label for="inicio1">Cantidad Inicial de turno</label>
-        <input type="text" id="inicio1">
+        <input type="number" id="inicio1">
         <div class="error-mensaje" id="error-inicio"></div>
 
         <label for="efectivo1">Cantidad en efectivo</label>
-        <input type="text" id="efectivo1" placeholder="Ingrese el efectivo en turno">
+        <input type="number" id="efectivo1" placeholder="Ingrese el efectivo en turno">
         <div class="error-mensaje" id="error-efectivo"></div>
 
         <label for="tarjeta1">Cantidad en tarjeta</label>
-        <input type="text" id="tarjeta1">
+        <input type="number" id="tarjeta1">
         <div class="error-mensaje" id="error-tarjeta"></div>
 
         <button type="submit" class="boton-modal">Finalizar Corte de turno</button>
@@ -49,8 +49,7 @@
   <!-- Modal: Corte Finalizado -->
   <div class="modal" id="modalCorteFinalizado">
     <div class="modal-contenido">
-      <a href="#" class="cerrar-modal">×</a>
-      <h2><span class="flecha">&#x2190;</span> Corte Finalizado</h2>
+      <h2>Corte Finalizado</h2>
 
       <div class="resultado-corte">
         <p><strong>Terminar Turno</strong></p>

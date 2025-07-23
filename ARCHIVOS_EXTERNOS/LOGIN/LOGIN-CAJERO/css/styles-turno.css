@@ -5,6 +5,7 @@
   box-sizing: border-box;
 }
 
+
 body, html {
   font-family: 'Arial', sans-serif;
   height: 100%;
@@ -27,7 +28,7 @@ body, html {
 
 /* Fondo café */
 .fondo-cafe {
-  background-image: url('/img/fondo4.jpg'); /* Asegúrate de tener esta imagen */
+  background-image: url('../../img/Fondo.jpg'); /* Asegúrate de tener esta imagen */
   background-size: cover;
   background-position: center;
   height: calc(100vh - 80px); /* Resta el header */

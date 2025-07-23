@@ -31,7 +31,7 @@ body {
 /* Fondo principal con imagen */
 .fondo {
   position: relative;
-  background-image: url('../img/fondo3.jpg'); /* imagen de fondo (café) */
+  background-image: url('../../img/Fondo.jpg'); /* imagen de fondo (café) */
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -61,6 +61,11 @@ body {
   width: 100%;
   max-width: 350px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.formulario input{
+  width: 335px;
+  border-radius: 6px;
 }
 
 .formulario h2 {
@@ -303,24 +308,6 @@ button:hover {
 /* --- Corrección para el botón en el header --- */
 .encabezado {
   position: relative; /* Asegura que sea el contenedor de referencia */
-}
-
-.cerrar-sesion {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #5b3e2b;
-  text-decoration: none;
-  font-size: 14px;
-  padding: 6px 12px;
-  border: 1px solid #d4c9b8;
-  border-radius: 4px;
-  transition: background 0.3s;
-}
-
-.cerrar-sesion:hover {
-  background: rgba(0,0,0,0.05);
 }
 
 /* --- Ajustes específicos para este modal --- */

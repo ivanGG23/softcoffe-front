@@ -1,8 +1,44 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f2f2f2;
+*{
+  padding: 0;
   margin: 0;
-  padding: 20px;
+}
+.header {
+    background-color: #F4F1EA;
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+}
+
+.logo {
+    height: 200px;
+    width: auto;
+    object-fit: contain;
+}
+
+.cerrar-sesion button {
+    padding: 8px 12px;
+    background-color: #5b3e2b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cerrar-sesion button:hover {
+    width: 115px;
+    height: 35px;
 }
 
 .container {

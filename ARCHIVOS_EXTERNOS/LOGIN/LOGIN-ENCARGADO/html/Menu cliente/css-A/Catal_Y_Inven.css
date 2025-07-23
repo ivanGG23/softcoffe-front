@@ -1,38 +1,56 @@
-{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
 
-
 body {
-  background-image: url('..fondo-cafe.jpg'); /* Aquí reemplaza con tu imagen de fondo */
+  background-image: url('../../../../img/Fondo.jpg'); /* Aquí reemplaza con tu imagen de fondo */
   background-size: cover;
   background-position: center;
   min-height: 100vh;
 }
 
 
-header {
-  background-color: #F4F1EA;
-  display: flex;
-  align-items: center;
-  padding: 1rem 2rem;
+.header {
+    background-color: #F4F1EA;
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-
-header img {
-  height: 60px; /* Tamaño más grande del logo */
-  margin-right: 20px;
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
 }
 
-
-header h1 {
-  font-size: 1.5rem;
-  color: #4B2E2E;
+.logo {
+    height: 200px;
+    width: auto;
+    object-fit: contain;
 }
 
+.cerrar-sesion button {
+    padding: 8px 12px;
+    background-color: #5b3e2b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cerrar-sesion button:hover {
+    width: 115px;
+    height: 35px;
+}
 
 .container {
   display: flex;
