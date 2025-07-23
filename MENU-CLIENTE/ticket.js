@@ -13,3 +13,6 @@ function imprimirTicket() {
     window.print();
   }, 300);
 }
+function cerrarModal() {
+  document.getElementById("modal-ticket").style.display = "none";
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,11 +9,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
+
 <body>
   <!-- Header -->
   <header class="header">
     <div class="logo">
-      <img src="/assets/img_A/logo.png" alt="Logo" class="logo-img" />
+      <img src="../ARCHIVOS_EXTERNOS/LOGIN/img/1LogoSoftCoffee.png" alt="Logo" class="logo-img" />
     </div>
 
     <div class="search-container">
@@ -31,11 +33,11 @@
 
   <!-- Botones de categorías -->
   <nav class="categorias">
-    <button class="selected" data-categoria="promos"><i class="fas fa-tags"></i> Promos</button>
+    <button class="selected" data-categoria="promociones"><i class="fas fa-tags"></i> Promos</button>
     <button data-categoria="cafe"><i class="fas fa-mug-hot"></i> Café</button>
     <button data-categoria="frappe"><i class="fas fa-blender"></i> Frappe</button>
     <button data-categoria="te"><i class="fas fa-leaf"></i> Té</button>
-    <button data-categoria="postres"><i class="fas fa-birthday-cake"></i> Postres</button>
+    <button data-categoria="postre"><i class="fas fa-birthday-cake"></i> Postres</button>
   </nav>
 
   <!-- Contenido principal -->
@@ -65,6 +67,19 @@
       <h3>¿A nombre de quién se realizará el pedido?</h3>
       <p class="client-name-instruction">Escribe solo un nombre y un apellido</p>
       <input type="text" class="client-name-input" placeholder="Nombre y Apellido">
+
+      <div class="client-payment-options">
+        <p>Selecciona el método de pago:</p>
+        <label>
+          <input type="radio" name="metodoPago" value="efectivo" checked>
+          Efectivo
+        </label>
+        <label>
+          <input type="radio" name="metodoPago" value="tarjeta">
+          Tarjeta
+        </label>
+      </div>
+
       <div class="client-name-buttons">
         <button class="confirm-client-name">Aceptar</button>
         <button class="cancel-client-name">Cancelar</button>
@@ -83,14 +98,15 @@
     </div>
   </div>
 
-<div id="modal-ticket" class="modal">
-  <div class="modal-content">
-    <span class="close-button" onclick="cerrarModal()">&times;</span>
-    <pre id="contenido-ticket"></pre>
-    <button onclick="imprimirTicket()">🖨️ Imprimir Ticket</button>
+  <div id="modal-ticket" class="modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="cerrarModal()">&times;</span>
+      <pre id="contenido-ticket"></pre>
+      <button onclick="imprimirTicket()">🖨️ Imprimir Ticket</button>
+    </div>
   </div>
-</div>
   <script src="Categoria.js"></script>
   <script src="ticket.js"></script>
 </body>
+
 </html>

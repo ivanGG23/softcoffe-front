@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => { 
   document.querySelector('.close-button').addEventListener('click', cerrarModal);
 
   // Datos de productos
@@ -12,21 +12,70 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
+  function agregarAlCarrito(e) {
+    const productCard = e.target.closest('.product-card');
+    const productId = parseInt(productCard.dataset.id);
+    const nombre = productCard.querySelector('.product-title')?.textContent;
+    const precio = parseFloat(productCard.querySelector('.product-price')?.textContent.replace('$', ''));
+    const imagen = productCard.querySelector('img')?.getAttribute('src');
+    const productQty = 1;
+
+    if (!nombre || isNaN(precio) || isNaN(productId)) return;
+
+    const tamaño = document.querySelector('input[name="tamaño"]:checked')?.value || '';
+    const leche = document.querySelector('input[name="leches"]:checked')?.value || '';
+    const azucar = document.querySelector('input[name="azucar"]:checked')?.value || '';
+    const extras = [];
+
+    document.querySelectorAll('input[name="crema"]:checked, input[name="canela"]:checked, input[name="malvaviscos"]:checked').forEach(checkbox => {
+      extras.push(checkbox.name);
+    });
+
+    const existingItemIndex = carrito.findIndex(item =>
+      item.id === productId &&
+      item.tamaño === tamaño &&
+      item.leche === leche &&
+      item.azucar === azucar &&
+      JSON.stringify(item.extras) === JSON.stringify(extras)
+    );
+
+    if (existingItemIndex >= 0) {
+      carrito[existingItemIndex].cantidad += productQty;
+    } else {
+      carrito.push({
+        id: productId,
+        nombre,
+        precio,
+        imagen,
+        cantidad: productQty,
+        tamaño,
+        leche,
+        azucar,
+        extras
+      });
+    }
+
+    actualizarCarrito();
+    mostrarNotificacion('¡Producto agregado al carrito!');
+  }
+
   const contenedorProductos = document.querySelector('.catalogo-grid');
   function renderizarProductosDesdeAPI(productos) {
     contenedorProductos.innerHTML = productos.map(producto => `
-    <div class="product-card" data-id="${producto.id}">
-      <img src="${producto.img_url}" alt="${producto.nombre}" class="product-img" />
-      <h3 class="product-title">${producto.nombre}</h3>
-      <p class="product-description">${producto.descripcion}</p>
-      <strong class="product-price">$${producto.precio.toFixed(2)}</strong>
-      <button class="add-to-cart">Agregar al carrito</button>
-    </div>
-  `).join('');
+      <div class="product-card" data-id="${producto.id}">
+        <img src="${producto.img_url}" alt="${producto.nombre}" class="product-img" />
+        <h3 class="product-title">${producto.nombre}</h3>
+        <p class="product-description">${producto.descripcion}</p>
+        <strong class="product-price">$${producto.precio.toFixed(2)}</strong>
+        <button class="add-to-cart">Agregar al carrito</button>
+      </div>
+    `).join('');
+
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+      btn.addEventListener('click', agregarAlCarrito);
+    });
   }
 
-  // Variables del DOM
-  
   const botonesCategorias = document.querySelectorAll('.categorias button');
   const cartCounter = document.querySelector('.cart-counter');
   const cartIcon = document.getElementById('carrito-icono');
@@ -52,23 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Estado del carrito
   let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-  // Inicialización
   cargarProductosDesdeAPI('promociones');
   actualizarCarrito();
 
-  // Eventos de categorías
-  botonesCategorias.forEach(boton => {
-    boton.addEventListener('click', function () {
-      botonesCategorias.forEach(btn => btn.classList.remove('selected'));
-      this.classList.add('selected');
-      renderizarProductos(this.dataset.categoria);
-    });
-  });
-
-  // Eventos del carrito
   cartIcon.addEventListener('click', () => {
     cartModal.classList.add('active');
   });
@@ -77,30 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
     cartModal.classList.remove('active');
   });
 
-  // Evento para realizar pedido (CORREGIDO)
   checkoutBtn.addEventListener('click', () => {
     if (carrito.length > 0) {
       cartModal.classList.remove('active');
-      clientNameModal.classList.add('active'); // Mostrar modal del nombre
+      clientNameModal.classList.add('active');
       clientNameInput.focus();
     } else {
       mostrarNotificacion('El carrito está vacío');
-    }
-  });
-
-  // Evento para confirmar nombre del cliente (CORREGIDO)
-  confirmClientNameBtn.addEventListener('click', () => {
-    const nombreCliente = clientNameInput.value.trim();
-
-    if (nombreCliente && nombreCliente.split(' ').length >= 2) {
-      procesarPedido(nombreCliente);
-      mostrarNotificacion(`Su pedido se ha realizado a nombre de: ${nombreCliente}`);
-      carrito = [];
-      actualizarCarrito();
-      clientNameModal.classList.remove('active');
-      clientNameInput.value = '';
-    } else {
-      mostrarNotificacion('Por favor ingresa nombre y apellido');
     }
   });
 
@@ -114,107 +134,68 @@ document.addEventListener('DOMContentLoaded', () => {
     clientNameInput.value = '';
   });
 
+  confirmClientNameBtn.addEventListener('click', () => {
+    const nombreCliente = clientNameInput.value.trim();
+    const metodoPago = document.querySelector('input[name="metodoPago"]:checked')?.value;
+
+    if (nombreCliente.split(' ').length < 2) {
+      mostrarNotificacion('Por favor ingresa nombre y apellido');
+      return;
+    }
+
+    const totalPedido = calcularTotal();
+    if (carrito.length === 0 || totalPedido <= 0) {
+      mostrarNotificacion('Tu carrito está vacío');
+      return;
+    }
+
+    fetch('http://localhost:7000/pedido', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clienteNombre: nombreCliente,
+        metodoPago,
+        carrito,
+        total: totalPedido
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        const numCliente = data.numCliente;
+        const numTicket = data.numTicket;
+        const mensaje = data.mensaje;
+
+        mostrarNotificacion(mensaje);
+        procesarPedido(nombreCliente, numCliente, numTicket, metodoPago);
+        document.getElementById("modal-ticket").style.display = "block";
+
+        carrito = [];
+        actualizarCarrito();
+        clientNameModal.classList.remove('active');
+        clientNameInput.value = '';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        mostrarNotificacion('No se pudo conectar con el servidor');
+      });
+  });
+
   declineCancelBtn.addEventListener('click', () => {
     cancelConfirmModal.classList.remove('active');
     clientNameModal.classList.add('active');
   });
 
-
-  // Cerrar modal al hacer clic fuera (CORREGIDO)
   document.addEventListener('click', (e) => {
     if (e.target === clientNameModal) {
       clientNameModal.classList.remove('active');
     }
   });
 
-  // Cerrar modal con ESC (CORREGIDO)
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && clientNameModal.classList.contains('active')) {
       clientNameModal.classList.remove('active');
     }
   });
-
-  // Funciones principales
-  function renderizarProductos(categoria) {
-    const productosMostrar = productos[categoria] || [];
-    contenedorProductos.innerHTML = productosMostrar.map(producto => `
-      <div class="product-card" data-id="${producto.id}">
-        <img src="${producto.imagen}" alt="${producto.nombre}" class="product-img" />
-        <h3 class="product-title">${producto.nombre}</h3>
-        <strong class="product-price">$${producto.precio.toFixed(2)}</strong>
-        <div class="quantity-control">
-          <button class="qty-btn minus"><i class="fas fa-minus"></i></button>
-          <input type="number" value="1" min="1" class="qty-input" />
-          <button class="qty-btn plus"><i class="fas fa-plus"></i></button>
-        </div>
-        <button class="add-to-cart">Agregar al carrito</button>
-      </div>
-    `).join('');
-
-    // Agregar eventos a los productos
-    document.querySelectorAll('.add-to-cart').forEach(btn => {
-      btn.addEventListener('click', agregarAlCarrito);
-    });
-
-    document.querySelectorAll('.qty-btn.minus').forEach(btn => {
-      btn.addEventListener('click', disminuirCantidad);
-    });
-
-    document.querySelectorAll('.qty-btn.plus').forEach(btn => {
-      btn.addEventListener('click', aumentarCantidad);
-    });
-  }
-
-  function agregarAlCarrito(e) {
-    const productCard = e.target.closest('.product-card');
-    const productId = parseInt(productCard.dataset.id);
-    const productQty = parseInt(productCard.querySelector('.qty-input').value);
-
-    if (isNaN(productQty)) return;
-
-    let product;
-    for (const categoria in productos) {
-      product = productos[categoria].find(p => p.id === productId);
-      if (product) break;
-    }
-    if (!product) return;
-
-    const tamaño = document.querySelector('input[name="tamaño"]:checked')?.value || '';
-    const leche = document.querySelector('input[name="leches"]:checked')?.value || '';
-    const azucar = document.querySelector('input[name="azucar"]:checked')?.value || '';
-    const extras = [];
-
-    document.querySelectorAll('input[name="crema"]:checked, input[name="canela"]:checked, input[name="malvaviscos"]:checked').forEach(checkbox => {
-      extras.push(checkbox.name);
-    });
-
-    const existingItemIndex = carrito.findIndex(item =>
-      item.id === productId &&
-      item.tamaño === tamaño &&
-      item.leche === leche &&
-      item.azucar === azucar &&
-      JSON.stringify(item.extras) === JSON.stringify(extras)
-    );
-
-    if (existingItemIndex >= 0) {
-      carrito[existingItemIndex].cantidad += productQty;
-    } else {
-      carrito.push({
-        id: productId,
-        nombre: product.nombre,
-        precio: product.precio,
-        imagen: product.imagen,
-        cantidad: productQty,
-        tamaño,
-        leche,
-        azucar,
-        extras
-      });
-    }
-
-    actualizarCarrito();
-    mostrarNotificacion('¡Producto agregado al carrito!');
-  }
 
   function actualizarCarrito() {
     localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -252,7 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const total = calcularTotal();
     totalPriceElement.textContent = `$${total.toFixed(2)}`;
 
-    // Eventos para los elementos del carrito
     document.querySelectorAll('.cart-item-remove').forEach(btn => {
       btn.addEventListener('click', eliminarDelCarrito);
     });
@@ -265,7 +245,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.addEventListener('click', aumentarCantidadCarrito);
     });
   }
-  function procesarPedido(nombreCliente) {
+
+  function procesarPedido(nombreCliente, numCliente, numTicket, metodoPago) {
     const total = calcularTotal();
     const fecha = new Date().toLocaleString();
 
@@ -275,6 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
 ==============================
 Cliente: ${nombreCliente}
 Fecha: ${fecha}
+
+Método de pago: ${capitalize(metodoPago)}
 
 Artículos:
 `;
@@ -291,16 +274,11 @@ TOTAL: $${total.toFixed(2)}
 ==============================
 `;
 
-    // Mostrar en modal
     document.getElementById('contenido-ticket').textContent = ticket;
     document.getElementById('modal-ticket').style.display = 'block';
-
-    // Imprimir directamente desde el navegador
-
   }
 
   function cerrarModal() {
-    console.log("Cerrando modal");
     document.getElementById('modal-ticket').style.display = 'none';
   }
 
