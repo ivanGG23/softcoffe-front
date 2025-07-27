@@ -12,14 +12,14 @@
 
 <body>
   <header class="header">
-        <div class="logo-container">
-            <img src="../../../../img/1LogoSoftCoffee.png" alt="SOFTCOFFE" class="logo">
-        </div>
+    <div class="logo-container">
+      <img src="../../../../img/1LogoSoftCoffee.png" alt="SOFTCOFFE" class="logo">
+    </div>
 
-        <div class="cerrar-sesion">
-            <button onclick="window.location.href='Catal_Y_Inven.html'">Regresar</button>
-        </div>
-    </header>
+    <div class="cerrar-sesion">
+      <button onclick="window.location.href='Catal_Y_Inven.html'">Regresar</button>
+    </div>
+  </header>
 
   <nav>
     <button data-categoria="promociones" class="active"><i class="fa-solid fa-tags"></i> Promos</button>
@@ -73,9 +73,9 @@
           <label>Imagen del producto</label>
           <label class="file-input-label" style="cursor: pointer;">
             <i class="fa-solid fa-image"></i> Seleccionar imagen (jpg, png)
-            <input type="file" id="agregar-imagen" class="file-input" accept="image/*" style="display: none;">
+            <input type="file" id="editar-imagen" class="file-input" accept="image/*" style="display: none;">
           </label>
-          <p id="estado-upload" style="color: #cc0000; font-weight: bold;"></p>
+          <p id="estado-upload-editar" style="color: green; font-weight: bold; display: none;"></p>
         </div>
         <div class="imagen-preview-container">
           <img id="imagen-actual" class="imagen-preview" alt="Imagen actual">
@@ -137,7 +137,7 @@
           <label>Imagen del producto</label>
           <label class="file-input-label" style="cursor: pointer;">
             <i class="fa-solid fa-image"></i> Seleccionar imagen (jpg, png)
-            <input type="file" id="editar-imagen" class="file-input" accept="image/*" style="display: none;">
+            <input type="file" id="agregar-imagen" class="file-input" accept="image/*" style="display: none;">
           </label>
           <p id="estado-upload" style="color: #cc0000; font-weight: bold;"></p>
         </div>

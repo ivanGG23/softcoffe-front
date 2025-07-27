@@ -106,8 +106,39 @@ async function cargarInsumosDesdeAPI() {
     console.error("Error al cargar insumos:", error);
   }
 }
+
+async function subirImagenACloudinary(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "img_productos"); // Asegúrate de que esté creado y en modo 'unsigned'
+  formData.append("folder", "menu-productos");        // Opcional, organiza en carpeta
+
+  try {
+    const res = await fetch("https://api.cloudinary.com/v1_1/dwjszeznq/image/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!res.ok) throw new Error("Error al subir imagen");
+
+    const data = await res.json();
+
+    if (!data.secure_url) throw new Error("Cloudinary no devolvió una URL segura");
+
+    console.log("Cloudinary response:", data);
+    console.log("Secure URL:", data.secure_url);
+
+    return data.secure_url;
+
+  } catch (err) {
+    console.error("Cloudinary upload error:", err.message);
+    return null;
+  }
+}
+
 //---------------------------------------------------------------------------------------------------------------------------
 let insumosSeleccionados = [];
+let imagenSeleccionadaURL = "";
 const productosData = {};
 const contenedorProductos = document.getElementById("contenedor-productos");
 const botonesCategorias = document.querySelectorAll("nav button");
@@ -208,7 +239,7 @@ async function guardarCambiosProducto(idProducto) {
     precio,
     categoriaId: categoria,
     descripcion,
-    imagen,
+    img_url: imagen,
     insumos: insumosSeleccionados
   };
 
@@ -226,8 +257,10 @@ async function guardarCambiosProducto(idProducto) {
       modalEditar.style.display = "none";
       cargarProductosDesdeAPI();
     } else {
-      const error = await res.text();
-      alert("Error al actualizar: " + error);
+      const errorText = await res.text();
+      console.error("Respuesta del backend:", errorText);
+      alert("Error al actualizar: " + errorText);
+
     }
   } catch (err) {
     console.error("Error al enviar datos editados:", err);
@@ -307,8 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const precio = parseFloat(document.getElementById("agregar-precio").value);
     const categoria = document.getElementById("agregar-categoria").value;
     const descripcion = document.getElementById("agregar-descripcion").value.trim();
-    const fileInput = document.getElementById("agregar-imagen");
-    const imagenUrl = "img/default.jpg";
+    const imagenFinal = imagenSeleccionadaURL || "img/default.jpg";
 
     if (!nombre || isNaN(precio) || !categoria || insumosSeleccionados.length === 0) {
       document.getElementById("error-general").style.display = "block";
@@ -322,7 +354,8 @@ document.addEventListener("DOMContentLoaded", () => {
       precio,
       categoriaId: parseInt(categoria),
       descripcion,
-      insumos: insumosSeleccionados
+      insumos: insumosSeleccionados,
+      img_url: imagenFinal
     };
 
     try {
@@ -337,6 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (res.ok) {
         alert("Producto registrado correctamente");
         modalAgregar.style.display = "none";
+        await cargarProductosDesdeAPI();
         mostrarProductos(categoria);
       } else {
         const error = await res.text();
@@ -374,27 +408,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.getElementById("agregar-imagen").addEventListener("change", function () {
+  let imagenSeleccionadaURL = "";
+
+  document.getElementById("agregar-imagen").addEventListener("change", async function () {
     const file = this.files[0];
     const preview = document.getElementById("imagen-agregar");
 
     if (file) {
-      const url = URL.createObjectURL(file);
-      preview.src = url;
-      preview.style.display = "block";
-      preview.dataset.url = url;
+      const cloudinaryURL = await subirImagenACloudinary(file);
+
+      if (cloudinaryURL) {
+        imagenSeleccionadaURL = cloudinaryURL;
+        preview.src = cloudinaryURL;
+        preview.style.display = "block";
+        preview.dataset.url = cloudinaryURL;
+        document.getElementById("estado-upload").textContent = "Imagen subida correctamente";
+        document.getElementById("estado-upload").style.color = "green";
+      } else {
+        document.getElementById("estado-upload").textContent = "Error al subir imagen";
+        document.getElementById("estado-upload").style.color = "red";
+      }
     }
   });
 
-  document.getElementById("editar-imagen").addEventListener("change", function () {
+  document.getElementById("editar-imagen").addEventListener("change", async function () {
     const file = this.files[0];
     const preview = document.getElementById("imagen-actual");
+    const estado = document.getElementById("estado-upload-editar");
 
     if (file) {
-      const url = URL.createObjectURL(file);
-      preview.src = url;
-      preview.style.display = "block";
-      preview.dataset.url = url;
+      estado.textContent = "Subiendo imagen...";
+      estado.style.color = "orange";
+      estado.style.display = "block";
+
+      const cloudinaryURL = await subirImagenACloudinary(file);
+
+      if (cloudinaryURL) {
+        preview.src = cloudinaryURL;
+        preview.dataset.url = cloudinaryURL;
+        preview.style.display = "block";
+
+        estado.textContent = "Imagen subida correctamente";
+        estado.style.color = "green";
+      } else {
+        estado.textContent = "Error al subir imagen";
+        estado.style.color = "red";
+      }
     }
   });
 
