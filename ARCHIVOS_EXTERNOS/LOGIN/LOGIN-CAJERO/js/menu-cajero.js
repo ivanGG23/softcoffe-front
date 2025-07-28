@@ -19,8 +19,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Clic para ver detalles
                 div.addEventListener('click', () => {
-                    localStorage.setItem('pedidoActual', JSON.stringify(pedido));
-                    window.location.href = 'pedido-confirmacion.html';
+                    fetch(`http://localhost:7000/pedido/${pedido.id}/detalle`)
+                        .then(res => res.json())
+                        .then(detalle => {
+                            const pedidoCompleto = {
+                                numero: detalle.id,                     // ✅ Num_orden entero
+                                nombre: detalle.cliente,
+                                monto: detalle.monto,                   // ✅ total del pedido
+                                metodo: detalle.metodo,                 // ✅ método de pago
+                                productos: detalle.productos.map(p => ({
+                                    nombre: p.nombre,
+                                    cantidad: p.cantidad,
+                                    precio: p.precio || 0
+                                }))
+                            };
+
+                            localStorage.setItem('pedidoActual', JSON.stringify(pedidoCompleto));
+                            window.location.href = 'pedido-confirmacion.html';
+                        })
+                        .catch(error => {
+                            console.error("Error al cargar el detalle del pedido:", error);
+                            alert("No se pudo cargar el detalle del pedido.");
+                        });
                 });
 
                 contenedor.appendChild(div);

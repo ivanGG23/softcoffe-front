@@ -21,11 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.ok) {
-        window.location.href = "html/inicio-turno.html";
-      } else {
-        showError(usernameInput, userError);
-        showError(passwordInput, passError);
-        triggerErrorAnimation();
+        const respuesta = await response.json();  // ⬅️ Extrae el cuerpo JSON
+
+        if (respuesta.id_usuario) {
+          localStorage.setItem("id_usuario", respuesta.id_usuario);  // ✅ Guarda el ID en localStorage
+          window.location.href = "html/inicio-turno.html";           // Redirige después
+        } else {
+          alert("Respuesta del servidor sin ID de usuario");
+          console.warn("Respuesta inesperada:", respuesta);
+        }
       }
     } catch (error) {
       alert("Error de conexión con el servidor");

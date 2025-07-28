@@ -30,7 +30,8 @@
             </div>
 
             <!-- Botón actual en tu pedido-confirmacion.html -->
-            <button class="shift-cut-btn" onclick="window.location.href='../html/corte-turno.html'">Corte de turno</button>
+            <button class="shift-cut-btn" onclick="window.location.href='../html/corte-turno.html'">Corte de
+                turno</button>
 
 
             <div class="search-label" id="info-pedido">No.Pedido/Nombre</div>
@@ -64,10 +65,12 @@
             <h2>Total a pagar</h2>
             <p class="total" id="total-pagar-big">$0.00</p>
             <div class="buttons">
-                <button class="cancel-btn" onclick="openModal('cancel-modal')">Cancelar</button>
-                <button class="confirm-btn" onclick="openModal('confirm-modal')">Confirmar Pago</button>
+                <button class="cancel-btn" onclick="cancelarPedido()">Cancelar</button>
+                <button class="confirm-btn" onclick="confirmarPedido()">Confirmar Pago</button>
             </div>
         </div>
+
+
     </div>
 
     <!-- Modal de Cancelación -->
@@ -143,8 +146,9 @@
             pedidoActual.nombre = datos.nombre;
             pedidoActual.fecha = datos.fecha || new Date().toISOString();
 
+            const idVisual = 'PED-' + pedidoActual.numero.toString().padStart(3, '0');
             document.getElementById('info-pedido').textContent =
-                `Pedido #${pedidoActual.numero} - ${pedidoActual.nombre}`;
+                `${idVisual} - ${pedidoActual.nombre}`;
 
             // Limpiar tabla anterior
             document.getElementById('productos-tbody').innerHTML = '';
@@ -159,22 +163,64 @@
             // Verificar si hay datos en localStorage
             const datosPedido = JSON.parse(localStorage.getItem('pedidoActual'));
             if (datosPedido) {
+                console.log("📦 Pedido cargado desde localStorage:", datosPedido);
                 cargarDatosPedido(datosPedido);
                 localStorage.removeItem('pedidoActual');
-            }
-
-            // Para desarrollo: datos de ejemplo
-            if (pedidoActual.productos.length === 0) {
-                cargarDatosPedido({
-                    numero: 'PED-' + Date.now().toString().slice(-6),
+            } else {
+                // Para desarrollo: datos de ejemplo válidos
+                const pedidoPrueba = {
+                    numero: 1, // ✅ Este sí lo acepta el backend
                     nombre: 'Cliente Demo',
+                    metodo: 'efectivo',
+                    monto: 60,
                     productos: [
-                        { nombre: "Café Americano", cantidad: 2, precio: 35.00 },
-                        { nombre: "Té Verde", cantidad: 1, precio: 25.00 }
+                        { nombre: "Café Americano", cantidad: 2, precio: 30.00 },
+                        { nombre: "Té Verde", cantidad: 1, precio: 30.00 }
                     ]
-                });
+                };
+                console.warn("⚠️ Usando datos de prueba:", pedidoPrueba);
+                cargarDatosPedido(pedidoPrueba);
             }
         });
+
+        // Función para confirmar el pedido
+        function confirmarPedido() {
+            console.log("ID usado para confirmar:", pedidoActual.numero);
+            fetch(`http://localhost:7000/api/pedido/${pedidoActual.numero}/estado`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: 'aprobado'
+            })
+                .then(res => res.text())
+                .then(msg => {
+                    console.log(msg);
+                    openModal('confirm-modal'); // Asegúrate que este modal exista
+                })
+                .catch(error => {
+                    console.error("Error al confirmar el pedido:", error);
+                });
+        }
+
+        function cancelarPedido() {
+            console.log("Cancelando pedido:", pedidoActual.numero);
+            fetch(`http://localhost:7000/api/pedido/${pedidoActual.numero}/estado`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: 'cancelado'
+            })
+                .then(res => res.text())
+                .then(msg => {
+                    console.log(msg);
+                    openModal('cancel-modal');
+                })
+                .catch(error => {
+                    console.error("Error al cancelar el pedido:", error);
+                });
+        }
     </script>
 
     <!-- Modal de confirmación -->

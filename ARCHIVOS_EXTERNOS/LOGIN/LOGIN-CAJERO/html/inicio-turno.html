@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inicio de turno</title>
   <link rel="stylesheet" href="../css/styles-turno.css">
 </head>
+
 <body>
   <header class="header">
     <img src="../../img/LogoSoftCoffee.png" alt="Logo SoftCoffe" class="logo">
 
     <div class="cerrar-sesion">
-  <button onclick="window.location.href='../../../../index.html'">Cerrar sesión</button>
-</div>
+      <button onclick="window.location.href='../../../../index.html'">Cerrar sesión</button>
+    </div>
   </header>
 
   <main class="fondo-cafe">
@@ -23,8 +25,7 @@
 
         <label for="efectivo">Ingrese Cantidad de efectivo</label>
         <div class="input-contenedor">
-          <span class="simbolo">$</span>
-          <input type="text" id="efectivo" placeholder="0.00">
+          <input type="number" id="efectivo" step="0.01" min="0" placeholder="0.00">
         </div>
 
         <p class="error" id="error-campo" style="display:none;">* Ingrese una cantidad válida mayor a 0</p>
@@ -43,48 +44,120 @@
   </main>
 
   <script>
-  const btnIniciar = document.getElementById('btn-iniciar');
-  const inputEfectivo = document.getElementById('efectivo');
-  const errorCampo = document.getElementById('error-campo');
-  const overlayExito = document.getElementById('overlay-exito');
-  const formulario = document.querySelector('.formulario');
+    const btnIniciar = document.getElementById('btn-iniciar');
+    const inputEfectivo = document.getElementById('efectivo');
+    const errorCampo = document.getElementById('error-campo');
+    const overlayExito = document.getElementById('overlay-exito');
+    const formulario = document.querySelector('.formulario');
 
-  // Solo permitir números y punto
-  inputEfectivo.addEventListener('input', () => {
-    inputEfectivo.value = inputEfectivo.value.replace(/[^0-9.]/g, '');
-  });
+    function obtenerIdUsuario() {
+      const raw = localStorage.getItem("id_usuario");
+      const parsed = parseInt(raw);
+      return isNaN(parsed) ? null : parsed;
+    }
 
-  btnIniciar.addEventListener('click', () => {
-    const valor = inputEfectivo.value.trim();
+    document.addEventListener("DOMContentLoaded", async () => {
+      const id_usuario = localStorage.getItem("id_usuario");
 
-    if (valor === "" || isNaN(valor) || Number(valor) <= 0) {
-      errorCampo.style.display = "block";
-      overlayExito.style.display = "none";
-      formulario.style.opacity = "1";
-    } else {
+      try {
+        const res = await fetch("http://localhost:7000/api/turno/estado", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_usuario })
+        });
+
+        const data = await res.json();
+        if (data.turno_abierto) {
+          // Redirigir directamente al corte de turno
+          window.location.href = "../html/corte-turno.html";
+
+          // Si prefieres mostrar el formulario de corte directamente en la misma vista, podemos hacer eso también.
+        }
+      } catch (err) {
+        console.error("Error al consultar estado del turno:", err);
+      }
+    });
+
+    btnIniciar.addEventListener('click', () => {
+      const valor = inputEfectivo.value.trim();
+      const efectivoNum = parseFloat(valor);
+      const idUsuarioNum = obtenerIdUsuario();
+      // Validación del efectivo
+      if (valor === "" || isNaN(valor) || Number(valor) <= 0) {
+        errorCampo.textContent = "* Ingrese una cantidad válida mayor a 0";
+        errorCampo.style.display = "block";
+        overlayExito.style.display = "none";
+        formulario.style.opacity = "1";
+        return;
+      }
+
+      if (isNaN(efectivoNum) || efectivoNum <= 0) {
+        errorCampo.textContent = "* Cantidad inválida. Ingrese un número mayor a 0";
+        errorCampo.style.display = "block";
+        formulario.style.opacity = "1";
+        return;
+      }
+
+      // Validación del ID de usuario
+      if (!idUsuarioNum || isNaN(idUsuarioNum)) {
+        errorCampo.textContent = "* Usuario no reconocido, inicia sesión nuevamente";
+        errorCampo.style.display = "block";
+        formulario.style.opacity = "1";
+        return;
+      }
+
+      const payload = {
+        efectivo: efectivoNum,
+        id_usuario: idUsuarioNum
+      };
+
+      console.log("Payload que se envía:", payload);
       errorCampo.style.display = "none";
-      overlayExito.style.display = "flex";
       formulario.style.opacity = "0.3";
 
-      // Redirigir a menu-cajero.html después de 2 segundos
-      setTimeout(() => {
-        window.location.href = "../html/menu-cajero.html";
-      }, 2000);
-    }
-  });
-</script>
+      fetch("http://localhost:7000/api/turno/iniciar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(res => res.json())
+        .then(respuesta => {
+          console.log("Respuesta del backend:", respuesta);
 
-<!-- Modal de confirmación -->
-<div class="modal-cerrar" id="modalCerrar">
-  <div class="modal-contenido">
-    <p>¿Salir de tu cuenta?</p>
-    <div class="botones-modal">
-      <button id="btn-si">Sí</button>
-      <button id="btn-no">No</button>
+          if (respuesta.error) {
+            errorCampo.textContent = "* " + respuesta.error;
+            errorCampo.style.display = "block";
+            formulario.style.opacity = "1";
+            overlayExito.style.display = "none";
+            return;
+          }
+
+          overlayExito.style.display = "flex";
+          setTimeout(() => {
+            window.location.href = "../html/menu-cajero.html";
+          }, 4000);
+        })
+        .catch(error => {
+          console.error("Error al iniciar el turno:", error);
+          errorCampo.textContent = "* Error al conectar con el servidor";
+          errorCampo.style.display = "block";
+          formulario.style.opacity = "1";
+        });
+    });
+  </script>
+
+  <!-- Modal de confirmación -->
+  <div class="modal-cerrar" id="modalCerrar">
+    <div class="modal-contenido">
+      <p>¿Salir de tu cuenta?</p>
+      <div class="botones-modal">
+        <button id="btn-si">Sí</button>
+        <button id="btn-no">No</button>
+      </div>
     </div>
   </div>
-</div>
 
 
 </body>
+
 </html>
