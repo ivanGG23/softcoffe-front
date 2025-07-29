@@ -129,7 +129,7 @@ btnEliminar.onclick = () => {
         btnSi.onclick = async () => {
             const id = productos[productoSeleccionado].id;
             try {
-                await fetch(`http://localhost:7000/inventario/${id}/estado`, {
+                await fetch(`http://98.86.13.209:7000/inventario/${id}/estado`, {
                     method: "PUT"
                 });
                 await cargarInventarioDesdeAPI();
@@ -147,7 +147,7 @@ btnEliminar.onclick = () => {
         btnSi.onclick = async () => {
             const codigo = insumosDesdeAPI[insumoSeleccionado].codigo;
             try {
-                await fetch(`http://localhost:7000/insumos/${codigo}/estado`, {
+                await fetch(`http://98.86.13.209:7000/insumos/${codigo}/estado`, {
                     method: "PUT"
                 });
                 await cargarInsumosDesdeAPI();
@@ -180,7 +180,7 @@ btnGuardar.onclick = async () => {
         };
 
         try {
-            await fetch("http://localhost:7000/inventario", {
+            await fetch("http://98.86.13.209:7000/inventario", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(nuevoProducto)
@@ -199,7 +199,7 @@ btnGuardar.onclick = async () => {
         const id = productos[productoSeleccionado].id;
 
         try {
-            await fetch(`http://localhost:7000/inventario/${id}`, {
+            await fetch(`http://98.86.13.209:7000/inventario/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(producto)
@@ -270,7 +270,7 @@ searchInput.addEventListener("input", () => {
 
 async function cargarInventarioDesdeAPI() {
     try {
-        const response = await fetch("http://localhost:7000/inventario");
+        const response = await fetch("http://98.86.13.209:7000/inventario");
         const data = await response.json();
         productos = data.map(prod => ({
             id: prod.id,
@@ -292,7 +292,7 @@ document.getElementById("btnReactivar").onclick = async () => {
     vistaReactivar.style.display = "block";
 
     try {
-        const res = await fetch("http://localhost:7000/inventario-inactivo");
+        const res = await fetch("http://98.86.13.209:7000/inventario-inactivo");
         const productosAgotados = await res.json();
 
         const tbody = document.getElementById("tablaReactivacion").querySelector("tbody");
@@ -327,7 +327,7 @@ document.getElementById("btnConfirmarReactivacion").onclick = async () => {
     }
 
     for (const codigo of seleccionados) {
-        await fetch(`http://localhost:7000/insumo/${codigo}/reactivar`, { method: "PUT" });
+        await fetch(`http://98.86.13.209:7000/insumo/${codigo}/reactivar`, { method: "PUT" });
     }
 
     alert("Insumos reactivados correctamente.");
@@ -339,7 +339,7 @@ async function reactivarProducto(id) {
     if (!confirm("¿Reactivar este producto y sus insumos relacionados?")) return;
 
     try {
-        const res = await fetch(`http://localhost:7000/inventario/${id}/reactivar`, {
+        const res = await fetch(`http://98.86.13.209:7000/inventario/${id}/reactivar`, {
             method: "PUT"
         });
         const msg = await res.text();
@@ -348,7 +348,7 @@ async function reactivarProducto(id) {
         vistaReactivar.style.display = "none";
         vistaInventario.style.display = "block";
         await cargarInventarioDesdeAPI();
-        const insumos = await fetch(`http://localhost:7000/insumos-inactivos/${id}`).then(r => r.json());
+        const insumos = await fetch(`http://98.86.13.209:7000/insumos-inactivos/${id}`).then(r => r.json());
         if (insumos.length > 0) {
             mostrarSeleccionDeInsumos(insumos);
         }

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const buscador = document.querySelector('.input-buscar');
 
     // ===== 1. Cargar pedidos desde API =====
-    fetch("http://localhost:7000/api/pedidos/cliente")
+    fetch("http://98.86.13.209:7000/api/pedidos/cliente")
         .then(res => res.json())
         .then(pedidos => {
             contenedor.innerHTML = "";
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Clic para ver detalles
                 div.addEventListener('click', () => {
-                    fetch(`http://localhost:7000/pedido/${pedido.id}/detalle`)
+                    fetch(`http://98.86.13.209:7000/pedido/${pedido.id}/detalle`)
                         .then(res => res.json())
                         .then(detalle => {
                             const pedidoCompleto = {

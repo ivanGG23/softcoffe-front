@@ -51,7 +51,7 @@ function agregarBotonAgregar() {
 
 async function cargarProductosDesdeAPI() {
   try {
-    const res = await fetch("http://localhost:7000/productos");
+    const res = await fetch("http://98.86.13.209:7000/productos");
     const productos = await res.json();
 
     for (const cat of ["promociones", "cafe", "frappe", "te", "postre"]) {
@@ -73,7 +73,7 @@ async function cargarProductosDesdeAPI() {
 
 async function cargarCategoriasDesdeAPI() {
   try {
-    const res = await fetch("http://localhost:7000/categorias");
+    const res = await fetch("http://98.86.13.209:7000/categorias");
     const categorias = await res.json();
 
     const selectAgregar = document.getElementById("agregar-categoria");
@@ -98,7 +98,7 @@ async function cargarCategoriasDesdeAPI() {
 
 async function cargarInsumosDesdeAPI() {
   try {
-    const res = await fetch("http://localhost:7000/insumos");
+    const res = await fetch("http://98.86.13.209:7000/insumos");
     await res.json();
     const contenedor = document.getElementById("resumen-insumos");
     if (contenedor) contenedor.innerHTML = "";
@@ -148,7 +148,7 @@ const modalEditar = document.getElementById("modal-editar");
 
 document.getElementById("btn-elegir-insumos").addEventListener("click", async () => {
   try {
-    const res = await fetch("http://localhost:7000/insumos");
+    const res = await fetch("http://98.86.13.209:7000/insumos");
     const insumos = await res.json();
     const contenedor = document.getElementById("contenedor-insumos-modal");
     contenedor.innerHTML = "";
@@ -244,7 +244,7 @@ async function guardarCambiosProducto(idProducto) {
   };
 
   try {
-    const res = await fetch(`http://localhost:7000/menu/${idProducto}`, {
+    const res = await fetch(`http://98.86.13.209:7000/menu/${idProducto}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -273,7 +273,7 @@ async function eliminarProducto(producto) {
   if (!confirmar) return;
 
   try {
-    const res = await fetch(`http://localhost:7000/menu/${producto.id}`, {
+    const res = await fetch(`http://98.86.13.209:7000/menu/${producto.id}`, {
       method: "DELETE"
     });
 
@@ -292,7 +292,7 @@ async function eliminarProducto(producto) {
 
 document.getElementById("btn-elegir-insumos-editar").addEventListener("click", async () => {
   try {
-    const res = await fetch("http://localhost:7000/insumos");
+    const res = await fetch("http://98.86.13.209:7000/insumos");
     const insumos = await res.json();
     const contenedor = document.getElementById("contenedor-insumos-modal");
     contenedor.innerHTML = "";
@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      const res = await fetch("http://localhost:7000/menu", {
+      const res = await fetch("http://98.86.13.209:7000/menu", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

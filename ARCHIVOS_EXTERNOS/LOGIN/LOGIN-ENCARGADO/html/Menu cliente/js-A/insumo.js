@@ -27,7 +27,7 @@ function renderTablaInsumosFiltrada(query) {
 
 async function cargarInsumosDesdeAPI() {
     try {
-        const response = await fetch("http://localhost:7000/insumos");
+        const response = await fetch("http://98.86.13.209:7000/insumos");
         const data = await response.json();
         insumosDesdeAPI = data;
         renderTablaInsumosFiltrada("");
@@ -83,7 +83,7 @@ document.getElementById("btnAgregarInsumo").onclick = async () => {
         };
 
         try {
-            const response = await fetch(`http://localhost:7000/insumos/${codigo}`, {
+            const response = await fetch(`http://98.86.13.209:7000/insumos/${codigo}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(insumoEditado)
@@ -121,7 +121,7 @@ document.getElementById("btnAgregarInsumo").onclick = async () => {
     }
 
     try {
-        const response = await fetch("http://localhost:7000/insumos", {
+        const response = await fetch("http://98.86.13.209:7000/insumos", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(nuevoInsumo)

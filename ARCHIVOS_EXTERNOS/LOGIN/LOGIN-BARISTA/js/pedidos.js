@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("http://localhost:7000/pedidos/aprobados")
+    fetch("http://98.86.13.209:7000/pedidos/aprobados")
         .then(response => response.json())
         .then(pedidos => renderPedidos(pedidos))
         .catch(error => console.error("Error al cargar pedidos:", error));

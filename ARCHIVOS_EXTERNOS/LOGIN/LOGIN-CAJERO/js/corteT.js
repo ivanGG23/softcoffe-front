@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const errorTarjeta = document.getElementById('error-tarjeta');
 
     try {
-        const res = await fetch("http://localhost:7000/api/turno/estado", {
+        const res = await fetch("http://98.86.13.209:7000/api/turno/estado", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id_usuario })
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         };
 
         try {
-            const res = await fetch("http://localhost:7000/api/turno/cerrar", {
+            const res = await fetch("http://98.86.13.209:7000/api/turno/cerrar", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)

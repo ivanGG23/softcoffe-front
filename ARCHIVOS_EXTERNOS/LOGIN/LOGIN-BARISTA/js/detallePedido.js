@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const id = params.get("id");
     console.log("ID recibido:", id);
 
-    fetch(`http://localhost:7000/pedido/${id}/detalle`)
+    fetch(`http://98.86.13.209:7000/pedido/${id}/detalle`)
         .then(response => {
             if (!response.ok) throw new Error("Pedido no encontrado");
             return response.json();
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".entregar-btn").addEventListener("click", () => {
         const id = new URLSearchParams(window.location.search).get("id");
 
-        fetch(`http://localhost:7000/api/pedido/${id}/entregar`, {
+        fetch(`http://98.86.13.209:7000/api/pedido/${id}/entregar`, {
             method: "PUT"
         })
             .then(response => {

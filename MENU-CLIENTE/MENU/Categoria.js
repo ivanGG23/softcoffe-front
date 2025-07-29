@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Datos de productos
   function cargarProductosDesdeAPI(categoria) {
-    fetch(`http://localhost:7000/productos/categoria/${categoria}`)
+    fetch(`http://98.86.13.209:7000/productos/categoria/${categoria}`)
       .then(res => res.json())
       .then(productos => renderizarProductosDesdeAPI(productos))
       .catch(error => {
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    fetch('http://localhost:7000/pedido', {
+    fetch('http://98.86.13.209:7000/pedido', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

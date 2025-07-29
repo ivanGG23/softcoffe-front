@@ -32,7 +32,7 @@ if (modo === "editar") {
         precio: parseFloat(precio.value)
     };
 
-    fetch(`http://localhost:7000/inventario/${id}`, {
+    fetch(`http://98.86.13.209:7000/inventario/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productoEditado)
@@ -56,7 +56,7 @@ if (insumoModo === "editar") {
         contenido: parseInt(document.getElementById("contenido").value)
     };
 
-    fetch(`http://localhost:7000/insumos/${codigo}`, {
+    fetch(`http://98.86.13.209:7000/insumos/${codigo}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(insumoEditado)

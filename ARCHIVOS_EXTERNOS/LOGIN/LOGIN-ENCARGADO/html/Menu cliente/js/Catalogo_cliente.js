@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
   checkoutBtn.addEventListener('click', () => {
     if (carrito.length > 0) {
       cartModal.classList.remove('active');
-      clientNameModal.classList.add('active'); // Mostrar modal del nombre
+      clientNameModal.classList.add('active');
       clientNameInput.focus();
     } else {
       mostrarNotificacion('El carrito está vacío');

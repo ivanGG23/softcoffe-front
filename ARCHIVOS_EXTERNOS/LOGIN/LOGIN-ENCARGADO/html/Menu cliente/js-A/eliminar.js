@@ -12,7 +12,7 @@ btnEliminar.onclick = () => {
 btnSi.onclick = () => {
     if (vistaInsumos.style.display !== "none") {
         const codigo = insumosDesdeAPI[insumoSeleccionado].codigo;
-        fetch(`http://localhost:7000/insumos/${codigo}/estado`, { method: "PUT" }) 
+        fetch(`http://98.86.13.209:7000/insumos/${codigo}/estado`, { method: "PUT" }) 
         .then(res => res.text())
         .then(msg => {
             console.log(msg);
@@ -21,7 +21,7 @@ btnSi.onclick = () => {
         });
     } else {
         const id = productos[productoSeleccionado].id;
-        fetch(`http://localhost:7000/inventario/${id}/estado`, { method: "PUT" }) 
+        fetch(`http://98.86.13.209:7000/inventario/${id}/estado`, { method: "PUT" }) 
         .then(res => res.text())
         .then(msg => {
             console.log(msg);
