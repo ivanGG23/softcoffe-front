@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,10 +15,16 @@
     }
   </style>
 </head>
+
 <body>
   <header>
-    <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
-    <h1>Datos estadísticos</h1>
+    <div class="datos">
+      <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
+      <h1>Datos estadísticos</h1>
+    </div>
+    <div class="cerrar-sesion">
+      <button onclick="window.location.href='../Admi_Secc.html'">Regresar</button>
+    </div>
   </header>
 
   <nav>
@@ -32,12 +39,6 @@
       <option value="">Tipo de Venta</option>
       <option value="total">Venta total</option>
       <option value="metodo">Venta por método de pago</option>
-    </select>
-
-    <select>
-      <option>Generar Reporte</option>
-      <option>PDF</option>
-      <option>Excel</option>
     </select>
   </nav>
 
@@ -82,4 +83,5 @@
     tipoVenta.addEventListener('change', redirigir);
   </script>
 </body>
+
 </html>

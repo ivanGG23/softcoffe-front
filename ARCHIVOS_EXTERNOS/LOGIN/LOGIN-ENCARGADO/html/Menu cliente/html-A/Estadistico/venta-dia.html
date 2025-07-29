@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,10 +13,16 @@
     }
   </style>
 </head>
+
 <body>
   <header>
-    <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
-    <h1>Venta por Día</h1>
+    <div class="datos">
+      <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
+      <h1>Venta por Día</h1>
+    </div>
+    <div class="cerrar-sesion">
+      <button onclick="window.location.href='../Admi_Secc.html'">Regresar</button>
+    </div>
   </header>
 
   <nav>
@@ -31,28 +38,18 @@
       <option value="total" selected>Venta total</option>
       <option value="metodo">Venta por método de pago</option>
     </select>
-
-    <select>
-      <option>Generar Reporte</option>
-      <option>PDF</option>
-      <option>Excel</option>
-    </select>
   </nav>
 
   <main id="contenido" class="oculto">
     <section class="tabla">
       <table>
         <thead>
-          <tr><th>Día</th><th>Venta</th></tr>
+          <tr>
+            <th>Día</th>
+            <th>Venta</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>Lunes</td><td>120</td></tr>
-          <tr><td>Martes</td><td>98</td></tr>
-          <tr><td>Miércoles</td><td>110</td></tr>
-          <tr><td>Jueves</td><td>105</td></tr>
-          <tr><td>Viernes</td><td>130</td></tr>
-          <tr><td>Sábado</td><td>150</td></tr>
-          <tr><td>Domingo</td><td>90</td></tr>
         </tbody>
       </table>
     </section>
@@ -63,68 +60,67 @@
   </main>
 
   <script>
-    const selectorVista = document.getElementById('selectorVista');
-    const tipoVenta = document.getElementById('tipoVenta');
-    const contenido = document.getElementById('contenido');
-
-    function redirigir() {
-      const vista = selectorVista.value;
-      const tipo = tipoVenta.value;
-
-      if (!vista || !tipo) return;
-
-      const rutas = {
-        hora: {
-          total: 'venta-hora.html',
-          metodo: 'venta-hora-metodo.html'
-        },
-        dia: {
-          total: 'venta-dia.html',
-          metodo: 'venta-dia-metodo.html'
-        },
-        mes: {
-          total: 'venta-mes.html',
-          metodo: 'venta-mes-metodo.html'
-        }
+    async function cargarDatos() {
+      const res = await fetch('http://localhost:7000/api/ventas-dia-total')
+      const data = await res.json();
+      const diasTraducidos = {
+        Monday: 'Lunes',
+        Tuesday: 'Martes',
+        Wednesday: 'Miércoles',
+        Thursday: 'Jueves',
+        Friday: 'Viernes',
+        Saturday: 'Sábado',
+        Sunday: 'Domingo'
       };
 
-      const destino = rutas[vista]?.[tipo];
-      if (destino && !window.location.pathname.includes(destino)) {
-        window.location.href = destino;
-      }
-    }
+      const etiquetas = data.map(item => diasTraducidos[item.dia] || item.dia);
+      const valores = data.map(item => item.total);
 
-    selectorVista.addEventListener('change', redirigir);
-    tipoVenta.addEventListener('change', redirigir);
+      new Chart(document.getElementById('graficoVentas'), {
+        type: 'bar',
+        data: {
+          labels: etiquetas,
+          datasets: [{
+            label: 'Ventas por día',
+            data: valores,
+            backgroundColor: '#007acc'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      const tbody = document.querySelector('tbody');
+      tbody.innerHTML = '';
+      data.forEach(item => {
+        const fila = document.createElement('tr');
+        const celdaDia = document.createElement('td');
+        const celdaVenta = document.createElement('td');
+
+        celdaDia.textContent = diasTraducidos[item.dia] || item.dia;
+        celdaVenta.textContent = item.total;
+
+        fila.appendChild(celdaDia);
+        fila.appendChild(celdaVenta);
+        tbody.appendChild(fila);
+      });
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       if (tipoVenta.value === 'total') {
         contenido.classList.remove('oculto');
-      }
-    });
-
-    const ctx = document.getElementById('graficoVentas').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
-        datasets: [{
-          label: 'Ventas por día',
-          data: [120, 98, 110, 105, 130, 150, 90],
-          backgroundColor: '#007acc'
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
-        },
-        scales: {
-          y: { beginAtZero: true }
-        }
+        cargarDatos();
       }
     });
   </script>
 </body>
+
 </html>

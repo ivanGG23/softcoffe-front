@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,10 +13,16 @@
     }
   </style>
 </head>
+
 <body>
   <header>
-    <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
-    <h1>Venta por Hora</h1>
+    <div class="datos">
+      <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
+      <h1>Venta por Hora</h1>
+    </div>
+    <div class="cerrar-sesion">
+      <button onclick="window.location.href='../Admi_Secc.html'">Regresar</button>
+    </div>
   </header>
 
   <nav>
@@ -31,29 +38,18 @@
       <option value="total" selected>Venta total</option>
       <option value="metodo">Venta por método de pago</option>
     </select>
-
-    <select>
-      <option>Generar Reporte</option>
-      <option>PDF</option>
-      <option>Excel</option>
-    </select>
   </nav>
 
   <main id="contenido" class="oculto">
     <section class="tabla">
       <table>
         <thead>
-          <tr><th>Hora</th><th>Venta</th></tr>
+          <tr>
+            <th>Hora</th>
+            <th>Venta</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>8:00am</td><td>22</td></tr>
-          <tr><td>10:00am</td><td>11</td></tr>
-          <tr><td>12:00pm</td><td>20</td></tr>
-          <tr><td>2:00pm</td><td>22</td></tr>
-          <tr><td>4:00pm</td><td>12</td></tr>
-          <tr><td>6:00pm</td><td>27</td></tr>
-          <tr><td>8:00pm</td><td>18</td></tr>
-          <tr><td>10:00pm</td><td>15</td></tr>
         </tbody>
       </table>
     </section>
@@ -105,27 +101,67 @@
     });
 
     const ctx = document.getElementById('graficoVentas').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['8:00am', '10:00am', '12:00pm', '2:00pm', '4:00pm', '6:00pm', '8:00pm', '10:00pm'],
-        datasets: [{
-          label: 'Ventas por hora',
-          data: [22, 11, 20, 22, 12, 27, 18, 15],
-          backgroundColor: '#007acc'
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { enabled: true }
+    async function cargarDatos() {
+      const res = await fetch('http://localhost:7000/api/ventas-hora-total')
+      const data = await res.json();
+
+      const formatoHora = hora => {
+        const h = parseInt(hora);
+        const ampm = h < 12 ? 'am' : 'pm';
+        const hora12 = h === 0 ? 12 : (h > 12 ? h - 12 : h);
+        return `${hora12}:00${ampm}`;
+      };
+
+      const etiquetas = data.map(item => formatoHora(item.hora));
+      const valores = data.map(item => item.total);
+
+      new Chart(document.getElementById('graficoVentas'), {
+        type: 'bar',
+        data: {
+          labels: etiquetas,
+          datasets: [{
+            label: 'Ventas por hora',
+            data: valores,
+            backgroundColor: '#007acc'
+          }]
         },
-        scales: {
-          y: { beginAtZero: true }
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
         }
+      });
+
+      const tbody = document.querySelector('tbody');
+      tbody.innerHTML = ''; 
+
+      data.forEach(item => {
+        const fila = document.createElement('tr');
+
+        const celdaHora = document.createElement('td');
+        celdaHora.textContent = formatoHora(item.hora);
+
+        const celdaVenta = document.createElement('td');
+        celdaVenta.textContent = item.total;
+
+        fila.appendChild(celdaHora);
+        fila.appendChild(celdaVenta);
+        tbody.appendChild(fila);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (tipoVenta.value === 'total') {
+        contenido.classList.remove('oculto');
+        cargarDatos();
       }
     });
   </script>
 </body>
+
 </html>

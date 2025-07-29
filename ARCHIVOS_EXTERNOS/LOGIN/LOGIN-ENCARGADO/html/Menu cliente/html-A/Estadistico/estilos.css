@@ -5,16 +5,41 @@ body {
 }
 
 header {
+    background-color: #F4F1EA;
+    padding: 20px;
+    margin-bottom: 15px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .datos{
   display: flex;
   align-items: center;
   background-color: #F4F1EA;
   color: rgb(0, 0, 0);
-  padding: 10px 20px;
 }
 
 .logo {
   height: 100px;
   margin-right: 5px;
+}
+
+.cerrar-sesion button {
+    padding: 8px 12px;
+    background-color: #5b3e2b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cerrar-sesion button:hover {
+    width: 115px;
+    height: 35px;
 }
 
 nav {

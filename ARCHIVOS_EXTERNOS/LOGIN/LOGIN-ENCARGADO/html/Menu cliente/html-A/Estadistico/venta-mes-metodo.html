@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,10 +13,16 @@
     }
   </style>
 </head>
+
 <body>
   <header>
-    <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
-    <h1>Venta por Mes - Método de Pago</h1>
+    <div class="datos">
+      <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
+      <h1>Venta por Mes - Método de Pago</h1>
+    </div>
+    <div class="cerrar-sesion">
+      <button onclick="window.location.href='../Admi_Secc.html'">Regresar</button>
+    </div>
   </header>
 
   <nav>
@@ -31,12 +38,6 @@
       <option value="total">Venta total</option>
       <option value="metodo" selected>Venta por método de pago</option>
     </select>
-
-    <select>
-      <option>Generar Reporte</option>
-      <option>PDF</option>
-      <option>Excel</option>
-    </select>
   </nav>
 
   <main id="contenido" class="oculto">
@@ -50,18 +51,6 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>Enero</td><td>500</td><td>450</td></tr>
-          <tr><td>Febrero</td><td>480</td><td>390</td></tr>
-          <tr><td>Marzo</td><td>520</td><td>500</td></tr>
-          <tr><td>Abril</td><td>510</td><td>470</td></tr>
-          <tr><td>Mayo</td><td>600</td><td>500</td></tr>
-          <tr><td>Junio</td><td>580</td><td>470</td></tr>
-          <tr><td>Julio</td><td>550</td><td>440</td></tr>
-          <tr><td>Agosto</td><td>620</td><td>500</td></tr>
-          <tr><td>Septiembre</td><td>540</td><td>470</td></tr>
-          <tr><td>Octubre</td><td>590</td><td>490</td></tr>
-          <tr><td>Noviembre</td><td>610</td><td>540</td></tr>
-          <tr><td>Diciembre</td><td>650</td><td>600</td></tr>
         </tbody>
       </table>
     </section>
@@ -111,38 +100,82 @@
         contenido.classList.remove('oculto');
       }
     });
-
+  </script>
+  <script>
+    const mesesTraducidos = {
+      "January": "Enero",
+      "February": "Febrero",
+      "March": "Marzo",
+      "April": "Abril",
+      "May": "Mayo",
+      "June": "Junio",
+      "July": "Julio",
+      "August": "Agosto",
+      "September": "Septiembre",
+      "October": "Octubre",
+      "November": "Noviembre",
+      "December": "Diciembre"
+    };
     const ctx = document.getElementById('graficoVentas').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: [
-          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        ],
-        datasets: [
-          {
-            label: 'Efectivo',
-            data: [500, 480, 520, 510, 600, 580, 550, 620, 540, 590, 610, 650],
-            backgroundColor: '#4caf50'
+
+    fetch("http://localhost:7000/api/ventas-mes-metodo")
+      .then(res => {
+        if (!res.ok) throw new Error("Respuesta inválida del servidor");
+        return res.json();
+      })
+      .then(data => {
+        if (!Array.isArray(data)) throw new Error("Formato no esperado");
+
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        const etiquetas = [];
+        const efectivo = [];
+        const tarjeta = [];
+
+        data.forEach(row => {
+          const mesOriginal = row.mes;
+          const mesFinal = mesesTraducidos[mesOriginal] || mesOriginal;
+
+          tbody.innerHTML += `
+        <tr>
+          <td>${mesFinal}</td>
+          <td>${row.efectivo}</td>
+          <td>${row.tarjeta}</td>
+        </tr>
+      `;
+
+          etiquetas.push(mesFinal);
+          efectivo.push(row.efectivo);
+          tarjeta.push(row.tarjeta);
+        });
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: etiquetas,
+            datasets: [
+              {
+                label: 'Efectivo',
+                data: efectivo,
+                backgroundColor: '#4caf50'
+              },
+              {
+                label: 'Tarjeta',
+                data: tarjeta,
+                backgroundColor: '#2196f3'
+              }
+            ]
           },
-          {
-            label: 'Tarjeta',
-            data: [450, 390, 500, 470, 500, 470, 440, 500, 470, 490, 540, 600],
-            backgroundColor: '#2196f3'
+          options: {
+            responsive: true,
+            plugins: { tooltip: { enabled: true } },
+            scales: { y: { beginAtZero: true } }
           }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          tooltip: { enabled: true }
-        },
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
+        });
+      })
+      .catch(err => console.error('Error cargando datos:', err));
   </script>
 </body>
+
 </html>

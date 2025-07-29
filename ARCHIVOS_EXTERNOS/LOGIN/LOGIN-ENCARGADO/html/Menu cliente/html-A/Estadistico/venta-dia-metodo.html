@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,10 +13,16 @@
     }
   </style>
 </head>
+
 <body>
   <header>
-    <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
-    <h1>Venta por Día - Método de Pago</h1>
+    <div class="datos">
+      <img src="../Estadistico/img/logo.png" alt="Logo SOFTCOFFE" class="logo" />
+      <h1>Venta por Día - Método de Pago</h1>
+    </div>
+    <div class="cerrar-sesion">
+      <button onclick="window.location.href='../Admi_Secc.html'">Regresar</button>
+    </div>
   </header>
 
   <nav>
@@ -31,12 +38,6 @@
       <option value="total">Venta total</option>
       <option value="metodo" selected>Venta por método de pago</option>
     </select>
-
-    <select>
-      <option>Generar Reporte</option>
-      <option>PDF</option>
-      <option>Excel</option>
-    </select>
   </nav>
 
   <main id="contenido" class="oculto">
@@ -50,13 +51,6 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>Lunes</td><td>300</td><td>150</td></tr>
-          <tr><td>Martes</td><td>280</td><td>120</td></tr>
-          <tr><td>Miércoles</td><td>310</td><td>140</td></tr>
-          <tr><td>Jueves</td><td>290</td><td>130</td></tr>
-          <tr><td>Viernes</td><td>350</td><td>160</td></tr>
-          <tr><td>Sábado</td><td>400</td><td>180</td></tr>
-          <tr><td>Domingo</td><td>250</td><td>100</td></tr>
         </tbody>
       </table>
     </section>
@@ -70,6 +64,15 @@
     const selectorVista = document.getElementById('selectorVista');
     const tipoVenta = document.getElementById('tipoVenta');
     const contenido = document.getElementById('contenido');
+    const diasTraducidos = {
+      Monday: 'Lunes',
+      Tuesday: 'Martes',
+      Wednesday: 'Miércoles',
+      Thursday: 'Jueves',
+      Friday: 'Viernes',
+      Saturday: 'Sábado',
+      Sunday: 'Domingo'
+    };
 
     function redirigir() {
       const vista = selectorVista.value;
@@ -106,35 +109,60 @@
         contenido.classList.remove('oculto');
       }
     });
+  </script>
 
+  <script>
     const ctx = document.getElementById('graficoVentas').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
-        datasets: [
-          {
-            label: 'Efectivo',
-            data: [300, 280, 310, 290, 350, 400, 250],
-            backgroundColor: '#4caf50'
+
+    fetch('http://localhost:7000/api/ventas-dia-metodo')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        const etiquetas = [];
+        const efectivo = [];
+        const tarjeta = [];
+
+        data.forEach(row => {
+          tbody.innerHTML += `
+          <tr>
+            <td>${diasTraducidos[row.dia] || row.dia}</td>
+            <td>${row.efectivo}</td>
+            <td>${row.tarjeta}</td>
+          </tr>
+        `;
+          etiquetas.push(row.dia);
+          efectivo.push(row.efectivo);
+          tarjeta.push(row.tarjeta);
+        });
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: etiquetas,
+            datasets: [
+              {
+                label: 'Efectivo',
+                data: efectivo,
+                backgroundColor: '#4caf50'
+              },
+              {
+                label: 'Tarjeta',
+                data: tarjeta,
+                backgroundColor: '#2196f3'
+              }
+            ]
           },
-          {
-            label: 'Tarjeta',
-            data: [150, 120, 140, 130, 160, 180, 100],
-            backgroundColor: '#2196f3'
+          options: {
+            responsive: true,
+            plugins: { tooltip: { enabled: true } },
+            scales: { y: { beginAtZero: true } }
           }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          tooltip: { enabled: true }
-        },
-        scales: {
-          y: { beginAtZero: true }
-        }
-      }
-    });
+        });
+      })
+      .catch(err => console.error('Error cargando datos:', err));
   </script>
 </body>
+
 </html>
