@@ -141,7 +141,6 @@
 
         // Función para cargar datos del pedido
         function cargarDatosPedido(datos) {
-            // Actualizar información principal
             pedidoActual.numero = datos.numero;
             pedidoActual.nombre = datos.nombre;
             pedidoActual.fecha = datos.fecha || new Date().toISOString();
@@ -150,26 +149,22 @@
             document.getElementById('info-pedido').textContent =
                 `${idVisual} - ${pedidoActual.nombre}`;
 
-            // Limpiar tabla anterior
             document.getElementById('productos-tbody').innerHTML = '';
             pedidoActual.productos = [];
 
-            // Agregar productos
             datos.productos.forEach(p => agregarProducto(p.nombre, p.cantidad, p.precio));
         }
 
         // Al cargar la página
         document.addEventListener('DOMContentLoaded', function () {
-            // Verificar si hay datos en localStorage
             const datosPedido = JSON.parse(localStorage.getItem('pedidoActual'));
             if (datosPedido) {
                 console.log("📦 Pedido cargado desde localStorage:", datosPedido);
                 cargarDatosPedido(datosPedido);
                 localStorage.removeItem('pedidoActual');
             } else {
-                // Para desarrollo: datos de ejemplo válidos
                 const pedidoPrueba = {
-                    numero: 1, // ✅ Este sí lo acepta el backend
+                    numero: 1,
                     nombre: 'Cliente Demo',
                     metodo: 'efectivo',
                     monto: 60,
@@ -196,7 +191,7 @@
                 .then(res => res.text())
                 .then(msg => {
                     console.log(msg);
-                    openModal('confirm-modal'); // Asegúrate que este modal exista
+                    openModal('confirm-modal');
                 })
                 .catch(error => {
                     console.error("Error al confirmar el pedido:", error);

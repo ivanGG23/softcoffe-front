@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.ok) {
-        const respuesta = await response.json();  // ⬅️ Extrae el cuerpo JSON
+        const respuesta = await response.json();
 
         if (respuesta.id_usuario) {
-          localStorage.setItem("id_usuario", respuesta.id_usuario);  // ✅ Guarda el ID en localStorage
-          window.location.href = "html/inicio-turno.html";           // Redirige después
+          localStorage.setItem("id_usuario", respuesta.id_usuario); 
+          window.location.href = "html/inicio-turno.html";
         } else {
           alert("Respuesta del servidor sin ID de usuario");
           console.warn("Respuesta inesperada:", respuesta);

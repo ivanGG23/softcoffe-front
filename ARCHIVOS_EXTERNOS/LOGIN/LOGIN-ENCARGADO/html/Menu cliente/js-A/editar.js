@@ -46,7 +46,7 @@ if (modo === "editar") {
     });
 }
 
-// Agregar al guardar insumo (btnAgregarInsumo):
+// Agregar al gaurdar insumo (btnAgregarInsumo):
 if (insumoModo === "editar") {
     const codigo = parseInt(document.getElementById("codigoInsumo").value);
     const insumoEditado = {

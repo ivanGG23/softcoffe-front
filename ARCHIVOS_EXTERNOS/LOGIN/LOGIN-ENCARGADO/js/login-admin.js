@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contraseña = passwordInput.value;
 
     try {
-      const response = await fetch('http://98.86.13.209:7000/login', {
+      const response = await fetch('http://localhost:7000/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, contraseña, rol })

@@ -92,7 +92,7 @@ btnAgregar.onclick = () => {
 
 btnEditar.onclick = () => {
     if (vistaInventario.style.display !== "none") {
-        // 👉 Modo editar producto
+
         if (productoSeleccionado === null) return alert("Selecciona un producto para editar.");
         const prod = productos[productoSeleccionado];
         nombre.value = prod.nombre;
@@ -103,7 +103,7 @@ btnEditar.onclick = () => {
         modalTitle.textContent = "Editar producto";
         modal.style.display = "flex";
     } else {
-        // 👉 Modo editar insumo
+
         if (insumoSeleccionado === null) return alert("Selecciona un insumo para editar.");
 
         const insumo = insumosDesdeAPI[insumoSeleccionado];
@@ -115,7 +115,6 @@ btnEditar.onclick = () => {
 
         insumoModo = "editar";
 
-        // ✅ Asignar el producto vinculado al insumo
         productoActualParaInsumo = { id: insumo.idProducto };
 
         modalInsumo.style.display = "flex";
@@ -233,7 +232,7 @@ btnNuevoInsumo.onclick = () => {
 };
 
 btnCambiarVista.onclick = () => {
-    vistaReactivar.style.display = "none"; // 👈 oculta la vista de reactivación al cambiar
+    vistaReactivar.style.display = "none"; 
 
     const inventarioVisible = vistaInventario.style.display !== "none";
     vistaInventario.style.display = inventarioVisible ? "none" : "block";

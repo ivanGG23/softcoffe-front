@@ -189,7 +189,7 @@ btnEliminarSi.addEventListener('click', async () => {
         });
 
         if (res.ok) {
-            await cargarUsuarios(); // Recarga la tabla
+            await cargarUsuarios();
             usuarioEditandoId = null;
         } else {
             const errorText = await res.text();

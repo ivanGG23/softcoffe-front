@@ -10,14 +10,14 @@ body {
   display: flex;
   align-items: center;
   padding: 15px 30px;
-  height: 70px; /* Fija la altura del encabezado */
-  overflow: hidden; /* Evita que el logo sobresalga */
+  height: 70px;
+  overflow: hidden;
 }
 
 .logo {
-  height: 150px;         /* Puedes aumentar esto según lo que necesites */
-  transform: scale(1.5); /* Agranda visualmente el logo */
-  transform-origin: left center; /* Escala desde la izquierda */
+  height: 150px; 
+  transform: scale(1.5);
+  transform-origin: left center;
   margin-right: 10px;
 }
 
@@ -31,7 +31,7 @@ body {
 /* Fondo principal con imagen */
 .fondo {
   position: relative;
-  background-image: url('../../img/Fondo.jpg'); /* imagen de fondo (café) */
+  background-image: url('../../img/Fondo.jpg'); 
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -307,7 +307,7 @@ button:hover {
 
 /* --- Corrección para el botón en el header --- */
 .encabezado {
-  position: relative; /* Asegura que sea el contenedor de referencia */
+  position: relative;
 }
 
 /* --- Ajustes específicos para este modal --- */
@@ -347,7 +347,7 @@ button:hover {
 
 /* Estilo para el modal de éxito */
 #modalCierreExitoso p {
-  color: #718350; /* Verde para éxito */
+  color: #718350;
   font-size: 16px;
   margin: 15px 0;
   text-align: center;

@@ -9,7 +9,7 @@
 /* Tarjetas de rol */
 .role-card {
   text-decoration: none;
-  color: #000000; /* Cambiado a negro (#000000) */
+  color: #000000;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -37,7 +37,7 @@
 .role-name {
   font-size: 1.2rem;
   font-weight: normal;
-  color: #000000; /* Asegurando color negro */
+  color: #000000;
 }
 
 /* Efectos hover */
@@ -51,7 +51,7 @@
 }
 
 .role-card:hover .role-name {
-  color: #000000; /* Mantiene negro en hover */
+  color: #000000;
 }
 
 /* Responsive */

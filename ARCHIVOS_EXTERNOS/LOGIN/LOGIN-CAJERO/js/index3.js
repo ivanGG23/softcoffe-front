@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('index3.js cargado'); // Debug de carga
+    console.log('index3.js cargado');
     
     // 1. Botón "Finalizar Corte"
     const formCorte = document.querySelector('form[action="#modalCorteFinalizado"]');
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnRegresar = document.querySelector('#modalCorteFinalizado .boton-modal');
     if (btnRegresar) {
         btnRegresar.addEventListener('click', function() {
-            window.location.href = '/html/menu-cajero.html'; // Ruta absoluta
+            window.location.href = '/html/menu-cajero.html';
         });
     }
 });

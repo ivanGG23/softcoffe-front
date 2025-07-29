@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         .then(res => res.json())
                         .then(detalle => {
                             const pedidoCompleto = {
-                                numero: detalle.id,                     // ✅ Num_orden entero
+                                numero: detalle.id,
                                 nombre: detalle.cliente,
-                                monto: detalle.monto,                   // ✅ total del pedido
-                                metodo: detalle.metodo,                 // ✅ método de pago
+                                monto: detalle.monto,
+                                metodo: detalle.metodo,
                                 productos: detalle.productos.map(p => ({
                                     nombre: p.nombre,
                                     cantidad: p.cantidad,

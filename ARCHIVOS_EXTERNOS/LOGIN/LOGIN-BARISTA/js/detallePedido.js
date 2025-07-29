@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!response.ok) throw new Error("Pedido no encontrado");
             return response.json();
         })
-        .then(data => renderDetalle(data))  // ✅ usa el objeto completo
+        .then(data => renderDetalle(data))  
         .catch(error => {
             console.error("Error al cargar detalle:", error);
             alert("No se pudo cargar el pedido. Verifica el ID.");
@@ -34,8 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 });
-
-
 
 function renderDetalle(data) {
     const container = document.querySelector(".detalle-container");

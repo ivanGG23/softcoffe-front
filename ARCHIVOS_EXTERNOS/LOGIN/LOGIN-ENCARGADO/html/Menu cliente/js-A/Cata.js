@@ -110,8 +110,8 @@ async function cargarInsumosDesdeAPI() {
 async function subirImagenACloudinary(file) {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "img_productos"); // Asegúrate de que esté creado y en modo 'unsigned'
-  formData.append("folder", "menu-productos");        // Opcional, organiza en carpeta
+  formData.append("upload_preset", "img_productos"); 
+  formData.append("folder", "menu-productos"); 
 
   try {
     const res = await fetch("https://api.cloudinary.com/v1_1/dwjszeznq/image/upload", {

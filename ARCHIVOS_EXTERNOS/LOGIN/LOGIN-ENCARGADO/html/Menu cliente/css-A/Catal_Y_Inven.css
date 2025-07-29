@@ -6,7 +6,7 @@
 }
 
 body {
-  background-image: url('../../../../img/Fondo.jpg'); /* Aquí reemplaza con tu imagen de fondo */
+  background-image: url('../../../../img/Fondo.jpg');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -74,7 +74,7 @@ body {
 
 .card:hover {
   transform: scale(1.03);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra más suave */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 

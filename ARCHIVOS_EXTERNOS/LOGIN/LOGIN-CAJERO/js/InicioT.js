@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', function () {
         resetearError();
 
         if (efectivoInput.value.trim() === '') {
-            event.preventDefault(); // Evita mostrar el mensaje de éxito
+            event.preventDefault();
             mostrarError(efectivoInput, errorMensaje, 'Este campo es obligatorio.');
         } else {
-            event.preventDefault(); // Cancela la acción por defecto
-            mostrarMensajeExito(); // Muestra el modal de éxito simulado
+            event.preventDefault();
+            mostrarMensajeExito(); 
         }
     });
 
@@ -29,6 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function mostrarMensajeExito() {
-        overlay.style.display = 'flex'; // Simula el modal
+        overlay.style.display = 'flex';
     }
 });

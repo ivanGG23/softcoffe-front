@@ -13,9 +13,9 @@ function renderPedidos(pedidos) {
         const card = document.createElement("div");
         card.className = "order-card";
         card.innerHTML = `
-      <p><strong>Pedido #${pedido.id}</strong></p>
-      <p>${pedido.nombreCompleto}</p>
-      <a href="../html/detalle-pedido.html?id=${pedido.id}" class="prepare-btn">Ver pedido</a>
+    <p><strong>Pedido #${pedido.id}</strong></p>
+    <p>${pedido.cliente}</p>
+    <a href="../html/detalle-pedido.html?id=${pedido.id}" class="prepare-btn">Ver pedido</a>
     `;
         grid.appendChild(card);
     });

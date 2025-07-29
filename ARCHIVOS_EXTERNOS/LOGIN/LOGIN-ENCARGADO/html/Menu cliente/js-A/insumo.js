@@ -39,10 +39,9 @@ async function cargarInsumosDesdeAPI() {
 function seleccionarInsumo(index, filaHTML) {
     tablaInsumos.querySelectorAll("tr").forEach(row => row.classList.remove("selected-row"));
     filaHTML.classList.add("selected-row");
-    insumoSeleccionado = index; // ← esta línea es la clave que faltaba
+    insumoSeleccionado = index; 
 }
 
-// ✅ Función de validación de campos del insumo
 function validarFormularioInsumo() {
     let valido = true;
 
@@ -73,7 +72,6 @@ function validarFormularioInsumo() {
 document.getElementById("btnAgregarInsumo").onclick = async () => {
     if (!validarFormularioInsumo()) return;
 
-    // 🚧 Modo edición de insumo
     if (insumoModo === "editar") {
         const codigo = parseInt(document.getElementById("codigoInsumo").value);
 
@@ -104,10 +102,9 @@ document.getElementById("btnAgregarInsumo").onclick = async () => {
             alert("No se pudo editar el insumo.");
         }
 
-        return; // ⛔ Importante: no ejecutar la lógica de "agregar"
+        return;
     }
 
-    // 🆕 Modo agregar insumo
     const nuevoInsumo = {
         codigo: parseInt(document.getElementById("codigoInsumo").value),
         idProducto: productoActualParaInsumo?.id,
@@ -155,7 +152,6 @@ document.getElementById("btnAgregarInsumo").onclick = async () => {
     }
 };
 
-// ✅ Botón para salir del formulario
 document.getElementById("btnSalirInsumo").onclick = () => {
     document.getElementById("modalInsumo").style.display = "none";
     productoActualParaInsumo = null;

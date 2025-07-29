@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   confirmBtn.addEventListener('click', () => {
-    window.location.href = "../../../../../../index.html"; // Redirige al login o página principal
+    window.location.href = "../../../../../../index.html";
   });
 });
 

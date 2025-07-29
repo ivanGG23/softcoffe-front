@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         let valido = true;
 
-        // Validaciones simples
         if (inicio.value.trim() === '') {
             mostrarError(inicio, errorInicio, 'Este campo es obligatorio.');
             valido = false;
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         if (!valido) return;
 
-        // Datos a enviar
         const id_usuario = parseInt(localStorage.getItem('id_usuario'));
         const inicio1 = parseFloat(inicio.value);
         const efectivo_final = parseFloat(efectivo.value);
@@ -69,13 +67,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             const respuesta = await res.json();
 
             if (res.ok) {
-                mostrarModalCorte(`✅ Corte exitoso${respuesta.coincide === false ? " pero no coincide con la cantidad de inicio ingresada" : ""}`);
+                mostrarModalCorte(`Corte exitoso${respuesta.coincide === false ? " pero no coincide con la cantidad de inicio ingresada" : ""}`);
             } else {
-                mostrarModalCorte(`⚠️ ${respuesta.error}. Ingresado: ${respuesta.ingresado}, Registrado: ${respuesta.esperado}`);
+                mostrarModalCorte(`${respuesta.error}. Ingresado: ${respuesta.ingresado}, Registrado: ${respuesta.esperado}`);
             }
         } catch (err) {
             console.error("Error al cerrar turno:", err);
-            mostrarModalCorte("❌ Error de conexión con el servidor");
+            mostrarModalCorte("Error de conexión con el servidor");
         }
     });
 

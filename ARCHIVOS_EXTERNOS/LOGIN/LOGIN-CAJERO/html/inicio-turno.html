@@ -68,10 +68,7 @@
 
         const data = await res.json();
         if (data.turno_abierto) {
-          // Redirigir directamente al corte de turno
           window.location.href = "../html/corte-turno.html";
-
-          // Si prefieres mostrar el formulario de corte directamente en la misma vista, podemos hacer eso también.
         }
       } catch (err) {
         console.error("Error al consultar estado del turno:", err);
@@ -82,7 +79,6 @@
       const valor = inputEfectivo.value.trim();
       const efectivoNum = parseFloat(valor);
       const idUsuarioNum = obtenerIdUsuario();
-      // Validación del efectivo
       if (valor === "" || isNaN(valor) || Number(valor) <= 0) {
         errorCampo.textContent = "* Ingrese una cantidad válida mayor a 0";
         errorCampo.style.display = "block";
@@ -98,7 +94,6 @@
         return;
       }
 
-      // Validación del ID de usuario
       if (!idUsuarioNum || isNaN(idUsuarioNum)) {
         errorCampo.textContent = "* Usuario no reconocido, inicia sesión nuevamente";
         errorCampo.style.display = "block";
