@@ -12,7 +12,7 @@ const btnEliminarNo = document.getElementById('btnEliminarNo');
 const userTable = document.getElementById('userTable');
 const submitBtn = form.querySelector('button[type="submit"]');
 
-const API_URL = 'http://localhost:7000/usuarios';
+const API_URL = 'http://98.86.13.209:7000/usuarios';
 
 let modoEdicion = false;
 let usuarioEditandoId = null;

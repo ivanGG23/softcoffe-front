@@ -114,7 +114,7 @@
   <script>
     const ctx = document.getElementById('graficoVentas').getContext('2d');
 
-    fetch('http://localhost:7000/api/ventas-dia-metodo')
+    fetch('http://98.86.13.209:7000/api/ventas-dia-metodo')
       .then(res => res.json())
       .then(data => {
         const tbody = document.querySelector('tbody');

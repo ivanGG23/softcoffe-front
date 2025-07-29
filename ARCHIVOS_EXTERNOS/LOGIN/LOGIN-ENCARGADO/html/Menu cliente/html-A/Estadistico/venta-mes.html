@@ -106,8 +106,8 @@
         contenido.classList.remove('oculto');
 
         try {
-          const res = await fetch('http://localhost:7000/api/ventas-mes-total');
-          const json = await res.json(); // espera estructura: { ventas_mensuales: [...] }
+          const res = await fetch('http://98.86.13.209:7000/api/ventas-mes-total');
+          const json = await res.json(); 
 
           if (!Array.isArray(json.ventas_mensuales)) {
             console.error("Formato inesperado:", json);

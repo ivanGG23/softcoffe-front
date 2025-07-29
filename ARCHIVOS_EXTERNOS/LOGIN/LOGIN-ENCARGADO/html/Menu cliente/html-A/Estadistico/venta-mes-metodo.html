@@ -118,7 +118,7 @@
     };
     const ctx = document.getElementById('graficoVentas').getContext('2d');
 
-    fetch("http://localhost:7000/api/ventas-mes-metodo")
+    fetch("http://98.86.13.209:7000/api/ventas-mes-metodo")
       .then(res => {
         if (!res.ok) throw new Error("Respuesta inválida del servidor");
         return res.json();

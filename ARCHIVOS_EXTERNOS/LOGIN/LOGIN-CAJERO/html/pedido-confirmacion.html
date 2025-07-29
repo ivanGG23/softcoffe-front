@@ -181,7 +181,7 @@
         // Función para confirmar el pedido
         function confirmarPedido() {
             console.log("ID usado para confirmar:", pedidoActual.numero);
-            fetch(`http://localhost:7000/api/pedido/${pedidoActual.numero}/estado`, {
+            fetch(`http://98.86.13.209:7000/api/pedido/${pedidoActual.numero}/estado`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'text/plain'
@@ -200,7 +200,7 @@
 
         function cancelarPedido() {
             console.log("Cancelando pedido:", pedidoActual.numero);
-            fetch(`http://localhost:7000/api/pedido/${pedidoActual.numero}/estado`, {
+            fetch(`http://98.86.13.209:7000/api/pedido/${pedidoActual.numero}/estado`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'text/plain'

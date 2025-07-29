@@ -60,7 +60,7 @@
       const id_usuario = localStorage.getItem("id_usuario");
 
       try {
-        const res = await fetch("http://localhost:7000/api/turno/estado", {
+        const res = await fetch("http://98.86.13.209:7000/api/turno/estado", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id_usuario })
@@ -110,7 +110,7 @@
       errorCampo.style.display = "none";
       formulario.style.opacity = "0.3";
 
-      fetch("http://localhost:7000/api/turno/iniciar", {
+      fetch("http://98.86.13.209:7000/api/turno/iniciar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

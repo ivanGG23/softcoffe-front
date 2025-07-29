@@ -102,7 +102,7 @@
 
     const ctx = document.getElementById('graficoVentas').getContext('2d');
     async function cargarDatos() {
-      const res = await fetch('http://localhost:7000/api/ventas-hora-total')
+      const res = await fetch('http://98.86.13.209:7000/api/ventas-hora-total')
       const data = await res.json();
 
       const formatoHora = hora => {
